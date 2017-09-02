@@ -37,12 +37,12 @@
         <li  *ngFor="let set of morseTranslations">
           <morse-frame
             [size]="'short'"
-            [signalType]="'character'"
+            [signalType]="'symbol'"
             [signal]="set.char">
           </morse-frame>
           <morse-frame
             [size]="'short'"
-            [signalType]="'symbol'"
+            [signalType]="'letter'"
             [signal]="set.symbol">
           </morse-frame>
         </li>

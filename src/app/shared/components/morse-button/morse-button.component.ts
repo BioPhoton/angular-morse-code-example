@@ -1,7 +1,7 @@
 import {
   AfterViewInit,
   Component,
-  EventEmitter,
+  EventEmitter, Input,
   OnDestroy,
   Output,
   ViewChild
@@ -16,6 +16,7 @@ import './seamless-loop';
 })
 export class MorseButtonComponent implements AfterViewInit, OnDestroy {
 
+  @Input()
   isMuted = true
   isMouseDown = false
 

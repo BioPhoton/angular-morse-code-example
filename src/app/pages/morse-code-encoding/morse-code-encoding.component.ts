@@ -9,6 +9,8 @@ import {MorseDisplayComponent} from '../../shared/components/morse-display/morse
 })
 export class MorseCodeEncodingComponent {
 
+  isMuted = true;
+
   startEvents$: Observable<number>
   stopEvents$: Observable<number>
   morseChar$: Observable<string>
@@ -32,6 +34,10 @@ export class MorseCodeEncodingComponent {
 
   sendStopSignal() {
     this.ms.sendStopTime(Date.now())
+  }
+
+  toggleMuted() {
+    this.isMuted = !this.isMuted;
   }
 
   resetAll() {

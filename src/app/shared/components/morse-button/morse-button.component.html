@@ -1,16 +1,11 @@
 <div class="btn-group">
-  <button class="btn btn-outline-dark btn-lg"
-    (click)="isMuted = !isMuted">
-    <i class="fa"
-      [ngClass]="{'fa-volume-up': !isMuted, 'fa-volume-off': isMuted}"></i>
-  </button>
 
   <button class="btn btn-morse btn-lg"
     [ngClass]="{'active': isMouseDown}"
     (mousedown)="onMouseDown()"
     (mouseleave)="onMouseLeave()"
     (mouseup)="onMouseUp()">
-    Morse Button
+    {{!isMouseDown ? 'Push To Send' : 'Release To Stop'}}
   </button>
 </div>
 <audio #beepSound src="assets/sounds/beep-04.wav" autostart="false"></audio>
