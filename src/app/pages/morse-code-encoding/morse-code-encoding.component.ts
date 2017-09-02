@@ -11,14 +11,14 @@ export class MorseCodeEncodingComponent {
 
   isMuted = true;
 
+  @ViewChildren(MorseDisplayComponent)
+  morseCodeDisplaysQueryList
+
   startEvents$: Observable<number>
   stopEvents$: Observable<number>
   morseChar$: Observable<string>
   morseSymbol$: Observable<string>
   morseLetter$: Observable<string>
-
-  @ViewChildren(MorseDisplayComponent)
-  morseCodeDisplaysQueryList
 
   constructor(public ms: MorseCodeDecoderService) {
     this.startEvents$ = ms.startEvents$
