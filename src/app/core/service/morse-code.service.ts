@@ -77,7 +77,7 @@ export class MorseCodeDecoderService {
     // continue after error by wrapping transformation with potential error in a switchMap
       .switchMap(n => Observable.of(n)
         .map(this.translateSymbolToLetter)
-        .catch(err => Observable.of('?'))
+        .catch(err => Observable.of('ERROR'))
       )
 
     // Handle extraordinary long breaks by emitting a normal long break
