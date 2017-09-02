@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, Inject} from '@angular/core';
+import {MorseTranslations} from './core/token/injection-tokens';
 
 @Component({
   selector: 'app-root',
@@ -6,12 +7,13 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   navBarCollapsed = true;
-  constructor() {
+
+  constructor(@Inject(MorseTranslations) public morseTranslations) {
   }
 
 
-  toggleNav(closeOnly?:boolean) {
-    if(closeOnly) {
+  toggleNav(closeOnly?: boolean) {
+    if (closeOnly) {
       this.navBarCollapsed = true;
     } else {
       this.navBarCollapsed = !this.navBarCollapsed;

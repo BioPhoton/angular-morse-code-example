@@ -1,10 +1,14 @@
-
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
 @import '../../../../global-variables';
 
 :host {
   display: block;
+  margin-top: 15px;
+}
+
+.reset {
+  margin-right: 5px;
 }
 
 .stream {
@@ -13,7 +17,7 @@
   overflow-x: scroll;
   display: block;
   white-space: nowrap;
-  border: 1px solid $gray-300;
+  padding-top: 5px;
 
   &.offset-1 {
     morse-frame:first-child {

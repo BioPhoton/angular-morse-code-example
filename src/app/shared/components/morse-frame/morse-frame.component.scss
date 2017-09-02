@@ -1,5 +1,3 @@
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
 @import "../../../../global-variables";
 
 :host {
@@ -7,7 +5,7 @@
 }
 
 .morse-frame {
-  width: $defaultFrameSize;
+  width: auto;
   display: inline-block;
   font-size: 16px;
   font-weight:bold;
@@ -22,10 +20,13 @@
     padding-left: 5px;
     padding-right: 5px;
 
-    background-color: $gray-100;
     border-width: 3px;
-    border-color: $gray-300;
+    border-color: $longBreakColor;
     border-style: solid;
+  }
+
+  &.size-auto {
+    width: auto;
   }
 
   &.size-short {
@@ -65,11 +66,11 @@
     }
     // short break
     .inner-frame[title='+'] {
-      border-color: $gray-300;
+      border-color: $shortBreakColor;
     }
     // long break
     .inner-frame[title='*'] {
-      border-color: $gray-500;
+      border-color: $longBreakColor;
     }
   }
 }

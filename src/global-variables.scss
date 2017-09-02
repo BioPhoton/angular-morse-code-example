@@ -1,6 +1,11 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+
 $defaultFrameSize: 120px !default;
 $shortFrameSize: 60px !default;
 $tinyFrameSize: 30px !default;
 
 $shortMorseColor: lightblue !default;
 $longMorseColor: cornflowerblue !default;
+$shortBreakColor: $gray-100 !default;
+$longBreakColor: $gray-300 !default;

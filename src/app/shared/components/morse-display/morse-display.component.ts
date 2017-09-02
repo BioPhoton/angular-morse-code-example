@@ -4,17 +4,21 @@ import {
   ElementRef,
   Input,
   OnChanges,
+  OnDestroy,
   SimpleChanges,
   ViewChild
 } from '@angular/core';
 import {Observable} from 'rxjs/Observable';
+import {Subject} from 'rxjs/Subject';
 
 @Component({
   selector: 'morse-display',
   templateUrl: './morse-display.component.html',
   styleUrls: ['./morse-display.component.scss']
 })
-export class MorseDisplayComponent implements OnChanges, AfterViewChecked {
+export class MorseDisplayComponent implements OnChanges, AfterViewChecked, OnDestroy {
+
+  private onDestroy$: Subject<boolean> = new Subject<boolean>()
 
   @Input()
   size = 'default'
@@ -24,7 +28,7 @@ export class MorseDisplayComponent implements OnChanges, AfterViewChecked {
 
   @Input()
   signal: Observable<any>
-  signalSubscription
+  private signalSubscription
   signals: any[] = []
 
   @Input()
@@ -42,11 +46,14 @@ export class MorseDisplayComponent implements OnChanges, AfterViewChecked {
       }
       // subscribe if observable
       if (changes.signal.currentValue instanceof Observable) {
+
         this.signalSubscription = changes.signal.currentValue
+          .takeUntil(this.onDestroy$)
           .subscribe(
             n => {
               this.signals.push(n)
-            }
+            },
+            console.log
           )
       }
     }
@@ -54,6 +61,14 @@ export class MorseDisplayComponent implements OnChanges, AfterViewChecked {
 
   ngAfterViewChecked() {
     this.streamElem.nativeElement.scrollLeft = this.streamElem.nativeElement.scrollWidth
+  }
+
+  ngOnDestroy() {
+    this.onDestroy$.next(true)
+  }
+
+  reset() {
+    this.signals = []
   }
 
 }

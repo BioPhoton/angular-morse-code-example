@@ -28,9 +28,7 @@ export class MorseCodeDecoderService {
   }
 
   private _injectedMorseChar$: Subject<string> = new Subject<string>()
-  get injectedMorseChar$(): Observable<string> {
-    return this._injectedMorseChar$;
-  }
+
   private _morseSymbol$: Observable<string>
   get morseSymbol$(): Observable<string> {
     return this._morseSymbol$;
@@ -49,42 +47,58 @@ export class MorseCodeDecoderService {
 
     // create stream of morse characters i. e. ".", "-", "+", "*"
     this._morseChar$ = Observable
-      .combineLatest(this.startEvents$, this.stopEvents$)
+    // merge the 2 streams and on every new value return the last value of each stream as an array
+      .combineLatest(this._startEvents$, this._stopEvents$)
+      // transform the array of timestamps to an absolute diff in milliseconds (positive or negative number)
       .map(this.toTimeDiff)
+      // transform the milliseconds to the equivalent morse char
       .map(this.msToMorseChar)
+      // filter out short breaks
       .filter(this.isCharNoShortBreak)
+      // merge the _injectedMorseChar$ stream to the above result
+      // this is an option to inject a morse character directly
       .merge(this._injectedMorseChar$)
 
     // create stream of morse symbols i. e. "...", "-.."
-    this._morseSymbol$ = this.morseChar$
-      .window(this.morseChar$.filter(this.isCharLongBreak))
+    this._morseSymbol$ = this._morseChar$
+    // transform char to array of streams
+    // open a buffer and close it if a long break is given
+      .window(this._morseChar$.filter(this.isCharLongBreak))
+      // transform the streams of arrays to a single stream with all values merged into it
       .flatMap(o => o.toArray())
+      // transform the array of chars to a string
       .map(this.charArrayToSymbol)
+      // filter out empty strings
       .filter(n => !!n)
 
     // create stream of letters i. e. "S", "D"
-    this._morseLetter$ = this.morseSymbol$
-      .filter(this.isMorseSymbol)
-      .map(this.symbolToLetter)
+    this._morseLetter$ = this._morseSymbol$
+    // .filter(this.isMorseSymbol)
+    // continue after error by wrapping transformation with potential error in a switchMap
+      .switchMap(n => Observable.of(n)
+        .map(this.translateSymbolToLetter)
+        .catch(err => Observable.of('?'))
+      )
 
+    // Handle extraordinary long breaks by emitting a normal long break
     const msLongBreak = Math.abs(MorseTimeRanges.longBreak)
-    this.stopEvents$
-      .switchMap(() => Observable.timer(msLongBreak, msLongBreak).first())
+    this._stopEvents$
+      .switchMap(() => Observable.timer(msLongBreak, msLongBreak).take(1))
       .subscribe(
         n =>
-          this.injectMorseChar(MorseCharacters.longBreak)
+          this.sendMorseChar(MorseCharacters.longBreak)
       )
   }
 
-  startSignal(): void {
-    this._startEvents$.next(Date.now())
+  sendStartTime(timestamp: number): void {
+    this._startEvents$.next(timestamp)
   }
 
-  stopSignal(): void {
-    this._stopEvents$.next(Date.now())
+  sendStopTime(timestamp: number): void {
+    this._stopEvents$.next(timestamp)
   }
 
-  injectMorseChar(char: string): void {
+  sendMorseChar(char: string): void {
     this._injectedMorseChar$.next(char)
   }
 
@@ -92,9 +106,14 @@ export class MorseCodeDecoderService {
     return arr[1] - arr[0]
   }
 
-  private symbolToLetter = (symbol: string): string => {
-    return this.MorseTranslations
-      .find(i => i.symbol === symbol).char
+  private translateSymbolToLetter = (symbol: string): string => {
+    const result = this.MorseTranslations
+      .find(i => i.symbol === symbol)
+    if (result) {
+      return result.char
+    }
+
+    throw new Error(`Translation Error: Could not translate morse symbol ${symbol} to a letter`)
   }
 
   private msToMorseChar = (ms: number): string => {

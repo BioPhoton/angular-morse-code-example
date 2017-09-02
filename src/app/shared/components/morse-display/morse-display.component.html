@@ -1,9 +1,21 @@
-<ng-content></ng-content>
-<div class="stream {{offset ? 'offset-'+offset : ''}}" #stream>
-  <morse-frame
-    *ngFor="let signal of signals"
-    [size]="size"
-    [signalType]="signalType"
-    [signal]="signal">
-  </morse-frame>
+<div class="card">
+  <div class="card-header">
+    <button
+      class="reset btn btn-sm btn-outline btn-outline-danger pull-left"
+      (click)="reset()">
+      <i class="fa fa-remove"></i>
+    </button>
+    <ng-content></ng-content>
+  </div>
+  <div class="card-block">
+    <div class="stream {{offset ? 'offset-'+offset : ''}}" #stream>
+      <morse-frame
+        *ngFor="let signal of signals"
+        [size]="size"
+        [signalType]="signalType"
+        [signal]="signal">
+      </morse-frame>
+    </div>
+
+  </div>
 </div>

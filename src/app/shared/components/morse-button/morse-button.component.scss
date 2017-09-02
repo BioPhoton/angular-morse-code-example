@@ -1,6 +1,43 @@
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
+@import "../../../../global-variables";
+
+.btn-morse {
+  border-width: 3px;
+  border-style: solid;
+  border-color: $longBreakColor;
+
+  background-color: #fff;
+}
+
+.btn-default,
+.btn-default:hover,
+.btn-default:active,
+.btn-default:active:focus,
+.btn-default:visited,
+.btn-default:focus {
+  color: #dcdcdc; background-color: #232323;
+  outline: none;
+}
 
 .active {
-  background-color: $green;
+  color: #fff;
+  border-color: $longBreakColor;
+  background-color: $longMorseColor;
+
+  animation-name: color_change;
+  animation-duration: 0.3s;
+  animation-iteration-count: 1;
+  animation-direction: alternate;
 }
+
+@keyframes color_change {
+  from {
+    border-color: $shortMorseColor;
+    background-color: $shortMorseColor;
+  }
+  to {
+    border-color: $longBreakColor;
+    background-color: $longMorseColor;
+  }
+}
+
+
