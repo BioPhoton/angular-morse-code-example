@@ -1,5 +1,5 @@
-# Real-Time stream processing with RxJs and Angular
-#### A playful example of using RxJs to create a morse code generator (No Angular knowledge needed!)
+# Real-Time stream processing with Reactive-Extensions
+#### A playful example of using RxJs to create a morse code generator with Angular (No Angular knowledge needed!)
  
 ## Agenda:
 - Intro to RxJs
