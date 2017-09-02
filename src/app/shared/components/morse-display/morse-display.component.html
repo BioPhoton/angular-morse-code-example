@@ -1,0 +1,9 @@
+<ng-content></ng-content>
+<div class="stream {{offset ? 'offset-'+offset : ''}}" #stream>
+  <morse-frame
+    *ngFor="let signal of signals"
+    [size]="size"
+    [signalType]="signalType"
+    [signal]="signal">
+  </morse-frame>
+</div>

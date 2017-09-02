@@ -1,0 +1,75 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+@import "../../../../global-variables";
+
+:host {
+
+}
+
+.morse-frame {
+  width: $defaultFrameSize;
+  display: inline-block;
+  font-size: 16px;
+  font-weight:bold;
+
+  .inner-frame {
+    line-height: 24px;
+    border-radius: 3px;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space:nowrap;
+    padding-left: 5px;
+    padding-right: 5px;
+
+    background-color: $gray-100;
+    border-width: 3px;
+    border-color: $gray-300;
+    border-style: solid;
+  }
+
+  &.size-short {
+    width: $shortFrameSize;
+  }
+
+  &.size-tiny {
+    width: $tinyFrameSize;
+  }
+
+  &.type-timestamp {
+    font-size: 11px;
+    .inner-frame {
+      border-style: dotted;
+    }
+  }
+
+  &.type-timediff {
+    font-size: 14px;
+    .inner-frame {
+      border-style: dashed;
+    }
+    // short morse
+    .inner-frame[title^='-'] {
+      color: $red;
+    }
+  }
+
+  &.type-character {
+    // short morse
+    .inner-frame[title='.'] {
+      border-color: $shortMorseColor;
+    }
+    // long morse
+    .inner-frame[title='-'] {
+      border-color: $longMorseColor;
+    }
+    // short break
+    .inner-frame[title='+'] {
+      border-color: $gray-300;
+    }
+    // long break
+    .inner-frame[title='*'] {
+      border-color: $gray-500;
+    }
+  }
+}

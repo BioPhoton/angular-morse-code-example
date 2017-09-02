@@ -1,0 +1,23 @@
+<h1>Morse code decoder</h1>
+
+<morse-button (mouseDownChange)="ms.startSignal()" (mouseUpChange)="ms.stopSignal()"></morse-button>
+
+<morse-display [signal]="ms.startEvents$" [signalType]="'timestamp'" [size]="">
+<h2>StartEvents</h2>
+</morse-display>
+
+<morse-display [signal]="ms.stopEvents$" [signalType]="'timestamp'" [size]="" [offset]="1">
+  <h2>StopEvents</h2>
+</morse-display>
+
+<morse-display [signal]="ms.morseChar$" [signalType]="'character'" [size]="'short'" [offset]="1">
+  <h2>MorseCode Characters</h2>
+</morse-display>
+
+<morse-display [signal]="ms.morseSymbol$" [signalType]="'symbol'" [size]="'short'" [offset]="1">
+  <h2>MorseCode Symbol</h2>
+</morse-display>
+
+<morse-display [signal]="ms.morseLetter$" [signalType]="'symbol'" [size]="'short'" [offset]="1">
+  <h2>MorseCode Letter</h2>
+</morse-display>

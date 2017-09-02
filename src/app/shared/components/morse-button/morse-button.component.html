@@ -1,0 +1,11 @@
+<button class="btn btn-default btn-lg"
+  [ngClass]="{'active':isMouseDown}"
+
+  (mousedown)="onMouseDown()"
+  (mouseleave)="onMouseLeave()"
+  (mouseup)="onMouseUp()">
+  Morse Button
+</button>
+
+<audio #beepSound src="http://www.soundjay.com/button/beep-07.wav" autostart="false" ></audio>
+<a (click)="playSound();"> Play</a>

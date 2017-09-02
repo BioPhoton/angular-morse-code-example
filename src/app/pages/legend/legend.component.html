@@ -1,0 +1,85 @@
+<div class="row">
+  <div class="col">
+    <h4>Timestamp</h4>
+    <ul class="legend">
+      <li>
+        <morse-frame
+          [signalType]="'timestamp'"
+          [signal]="timestamp"></morse-frame>
+      </li>
+    </ul>
+    <h4>Morse Durations</h4>
+    <ul class="legend">
+      <li>
+        Sending:
+        <morse-frame
+          [size]="'short'"
+          [signalType]="'timediff'"
+          [signal]="186"></morse-frame>
+      </li>
+      <li>
+        Waiting:
+        <morse-frame
+          [size]="'short'"
+          [signalType]="'timediff'"
+          [signal]="-325"></morse-frame>
+      </li>
+
+    </ul>
+  </div>
+  <div class="col">
+    <h4>Morse Characters</h4>
+    <ul class="legend">
+      <li>
+        Short Morse:
+        <morse-frame
+          [size]="'short'"
+          [signalType]="'character'"
+          [signal]="'.'"></morse-frame>
+      </li>
+      <li>
+        Long Morse:
+        <morse-frame
+          [size]="'short'"
+          [signalType]="'character'"
+          [signal]="'-'"></morse-frame>
+      </li>
+
+      <li>
+        Short Break:
+        <morse-frame
+          [size]="'short'"
+          [signalType]="'character'"
+          [signal]="'+'"></morse-frame>
+      </li>
+
+      <li>
+        Long Break:
+        <morse-frame
+          [size]="'short'"
+          [signalType]="'character'"
+          [signal]="'*'"></morse-frame>
+      </li>
+    </ul>
+  </div>
+  <div class="col">
+    <h4>Sympol</h4>
+    <ul class="legend">
+      <li>
+        <morse-frame
+          [size]="'short'"
+          [signalType]="'symbol'"
+          [signal]="'------'"></morse-frame>
+      </li>
+    </ul>
+    <h4>Letter</h4>
+    <ul class="legend">
+      <li>
+        <morse-frame
+          [size]="'tiny'"
+          [signalType]="'letter'"
+          [signal]="'A'"></morse-frame>
+      </li>
+    </ul>
+  </div>
+</div>
