@@ -16,6 +16,9 @@
 - Resources
 - Good bye!
 
+## Demo
+Find the final code online at [angular-morse-code-example](https://biophoton.github.io/angular-morse-code-example/)
+
 ## Overview
 Using RxJs to process streams in real-time. 
 In this talk you will get a overview over Reactive-Extensions and see it's usage in a live-coding session.
