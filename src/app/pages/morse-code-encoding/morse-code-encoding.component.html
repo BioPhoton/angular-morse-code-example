@@ -21,26 +21,26 @@
   (mouseDownChange)="sendStartSignal()"
   (mouseUpChange)="sendStopSignal()"></morse-button>
 
-<morse-display [signal]="startEvents$" [signalType]="'timestamp'" [size]="">
+<morse-display [signal]="startEvents$ | async" [signalType]="'timestamp'" [size]="">
   <h4>StartEvents</h4>
 </morse-display>
 
-<morse-display [signal]="stopEvents$" [signalType]="'timestamp'" [size]=""
+<morse-display [signal]="stopEvents$ | async" [signalType]="'timestamp'" [size]=""
   [offset]="1">
   <h4>StopEvents</h4>
 </morse-display>
 
-<morse-display [signal]="morseChar$" [signalType]="'character'"
+<morse-display [signal]="morseChar$ | async" [signalType]="'character'"
   [size]="'short'" [offset]="1">
   <h4>MorseCode Characters</h4>
 </morse-display>
 
-<morse-display [signal]="morseSymbol$" [signalType]="'symbol'"
+<morse-display [signal]="morseSymbol$ | async" [signalType]="'symbol'"
   [size]="'auto'" [offset]="1">
   <h4>MorseCode Symbol</h4>
 </morse-display>
 
-<morse-display [signal]="morseLetter$" [signalType]="'letter'"
+<morse-display [signal]="morseLetter$ | async" [signalType]="'letter'"
   [size]="'short'" [offset]="1">
   <h4>MorseCode Letter</h4>
 </morse-display>

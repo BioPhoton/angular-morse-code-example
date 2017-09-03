@@ -28,7 +28,6 @@ export class MorseDisplayComponent implements OnChanges, AfterViewChecked, OnDes
 
   @Input()
   signal: Observable<any>
-  private signalSubscription
   signals: any[] = []
 
   @Input()
@@ -38,24 +37,8 @@ export class MorseDisplayComponent implements OnChanges, AfterViewChecked, OnDes
   streamElem: ElementRef
 
   ngOnChanges(changes: SimpleChanges) {
-    if ('signal' in changes) {
-      // unsubscribe if subscribed
-      if (this.signalSubscription) {
-        this.signalSubscription.unsubscribe()
-        this.signalSubscription = undefined;
-      }
-      // subscribe if observable
-      if (changes.signal.currentValue instanceof Observable) {
-
-        this.signalSubscription = changes.signal.currentValue
-          .takeUntil(this.onDestroy$)
-          .subscribe(
-            n => {
-              this.signals.push(n)
-            },
-            console.log
-          )
-      }
+    if ('signal' in changes && changes.signal.currentValue) {
+      this.signals.push(this.unwrap(changes.signal.currentValue))
     }
   }
 
@@ -69,6 +52,10 @@ export class MorseDisplayComponent implements OnChanges, AfterViewChecked, OnDes
 
   reset() {
     this.signals = []
+  }
+
+  private unwrap(val: any) {
+    return (typeof val === 'object' && 'wrapped' in val) ? val.wrapped : val
   }
 
 }

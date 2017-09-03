@@ -10,10 +10,10 @@
   <div class="card-block">
     <div class="stream {{offset ? 'offset-'+offset : ''}}" #stream>
       <morse-frame
-        *ngFor="let signal of signals"
+        *ngFor="let s of signals"
         [size]="size"
         [signalType]="signalType"
-        [signal]="signal">
+        [signal]="s">
       </morse-frame>
     </div>
 

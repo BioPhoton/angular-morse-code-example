@@ -76,14 +76,16 @@ export class MorseCodeDecoderService {
     // .filter(this.isMorseSymbol)
     // continue after error by wrapping transformation with potential error in a switchMap
       .switchMap(n => Observable.of(n)
+        // try to translate the string
         .map(this.translateSymbolToLetter)
+        // if an error occures catch it and return 'ERROR' as next value
         .catch(err => Observable.of('ERROR'))
       )
 
     // Handle extraordinary long breaks by emitting a normal long break
     const msLongBreak = Math.abs(MorseTimeRanges.longBreak)
     this._stopEvents$
-      .switchMap(() => Observable.timer(msLongBreak, msLongBreak).take(1))
+      .switchMap(() => Observable.timer(msLongBreak, msLongBreak).take(3))
       .subscribe(
         n =>
           this.sendMorseChar(MorseCharacters.longBreak)
