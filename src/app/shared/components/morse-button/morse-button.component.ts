@@ -7,8 +7,6 @@ import {
   ViewChild
 } from '@angular/core';
 
-import './seamless-loop';
-
 @Component({
   selector: 'morse-button',
   templateUrl: './morse-button.component.html',
