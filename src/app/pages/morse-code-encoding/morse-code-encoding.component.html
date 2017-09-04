@@ -1,11 +1,14 @@
 <h1>Morse code decoder</h1>
 <p>
-  Take a look at the legend page to get a quick overview of the different symbols.
+  Take a look at the legend page to get a quick overview of the different
+  symbols.
   To morse just click and release the button.
   To get used to the morser keep following in mind:
   We can produce long and short signals and long and short breaks.
-  If you stop morseing for more then 900ms a long break will be automatically emitted to start the translation.
-  Lets try to morse an "E" by click the button for a short time and wait for the automatically generated break.
+  If you stop morseing for more then 900ms a long break will be automatically
+  emitted to start the translation.
+  Lets try to morse an "E" by click the button for a short time and wait for the
+  automatically generated break.
 </p>
 
 <button class="btn btn-outline btn-outline-danger btn-lg" (click)="resetAll()">
@@ -21,11 +24,11 @@
   (mouseDownChange)="sendStartSignal()"
   (mouseUpChange)="sendStopSignal()"></morse-button>
 
-<morse-display [signal]="startEvents$ | async" [signalType]="'timestamp'" [size]="">
+<morse-display [signal]="startEvents$ | async" [signalType]="'timestamp'">
   <h4>StartEvents</h4>
 </morse-display>
 
-<morse-display [signal]="stopEvents$ | async" [signalType]="'timestamp'" [size]=""
+<morse-display [signal]="stopEvents$ | async" [signalType]="'timestamp'"
   [offset]="1">
   <h4>StopEvents</h4>
 </morse-display>
@@ -34,13 +37,12 @@
   [size]="'short'" [offset]="1">
   <h4>MorseCode Characters</h4>
 </morse-display>
-
 <morse-display [signal]="morseSymbol$ | async" [signalType]="'symbol'"
   [size]="'auto'" [offset]="1">
   <h4>MorseCode Symbol</h4>
 </morse-display>
 
 <morse-display [signal]="morseLetter$ | async" [signalType]="'letter'"
-  [size]="'short'" [offset]="1">
+  [size]="'tiny'" [offset]="1">
   <h4>MorseCode Letter</h4>
 </morse-display>

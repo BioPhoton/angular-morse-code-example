@@ -1,4 +1,4 @@
-import {Component, ViewChildren, WrappedValue} from '@angular/core';
+import {Component, ViewChildren} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {MorseCodeDecoderService} from '../../core/service/morse-code.service';
 import {MorseDisplayComponent} from '../../shared/components/morse-display/morse-display.component';
@@ -21,11 +21,21 @@ export class MorseCodeEncodingComponent {
   morseLetter$: Observable<string>
 
   constructor(public ms: MorseCodeDecoderService) {
-    this.startEvents$ = ms.startEvents$.map(n => WrappedValue.wrap(n)) as any
-    this.stopEvents$ = ms.stopEvents$.map(n => WrappedValue.wrap(n)) as any
-    this.morseChar$ = ms.morseChar$.map(n => WrappedValue.wrap(n)) as any
-    this.morseSymbol$ = ms.morseSymbol$.map(n => WrappedValue.wrap(n)) as any
-    this.morseLetter$ = ms.morseLetter$.map(n => WrappedValue.wrap(n)) as any
+    this.startEvents$ = ms.startEvents$.map(v => {
+      return {wrapped: v}
+    }) as any
+    this.stopEvents$ = ms.stopEvents$.map(v => {
+      return {wrapped: v}
+    }) as any
+    this.morseChar$ = ms.morseChar$.map(v => {
+      return {wrapped: v}
+    }) as any
+    this.morseSymbol$ = ms.morseSymbol$.map(v => {
+      return {wrapped: v}
+    }) as any
+    this.morseLetter$ = ms.morseLetter$.map(v => {
+      return {wrapped: v}
+    }) as any
   }
 
   sendStartSignal() {

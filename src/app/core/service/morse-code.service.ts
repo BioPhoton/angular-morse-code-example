@@ -34,10 +34,14 @@ export class MorseCodeDecoderService {
     return this._morseSymbol$;
   }
 
+  private _injectedMorseSymbol$: Subject<string> = new Subject<string>()
+
   private _morseLetter$: Observable<string>
   get morseLetter$(): Observable<string> {
     return this._morseLetter$;
   }
+
+  private _injectedMorseLetter$: Subject<string> = new Subject<string>()
 
   constructor(
     @Inject(MorseTimeRanges) private MorseTimeRanges,
@@ -70,6 +74,10 @@ export class MorseCodeDecoderService {
       .map(this.charArrayToSymbol)
       // filter out empty strings
       .filter(n => !!n)
+      // merge the _injectedMorseSymbol$ stream to the above result
+      // this is an option to inject a morse symbol directly
+      .merge(this._injectedMorseSymbol$)
+
 
     // create stream of letters i. e. "S", "D"
     this._morseLetter$ = this._morseSymbol$
@@ -81,11 +89,14 @@ export class MorseCodeDecoderService {
         // if an error occures catch it and return 'ERROR' as next value
         .catch(err => Observable.of('ERROR'))
       )
+      // merge the _injectedMorseLetter$ stream to the above result
+      // this is an option to inject a morse letter directly
+      .merge(this._injectedMorseLetter$)
 
     // Handle extraordinary long breaks by emitting a normal long break
     const msLongBreak = Math.abs(MorseTimeRanges.longBreak)
     this._stopEvents$
-      .switchMap(() => Observable.timer(msLongBreak, msLongBreak).take(3))
+      .switchMap(() => Observable.timer(msLongBreak, msLongBreak).take(4))
       .subscribe(
         n =>
           this.sendMorseChar(MorseCharacters.longBreak)
@@ -102,6 +113,14 @@ export class MorseCodeDecoderService {
 
   sendMorseChar(char: string): void {
     this._injectedMorseChar$.next(char)
+  }
+
+  sendMorseSymbol(symbol: string): void {
+    this._injectedMorseSymbol$.next(symbol)
+  }
+
+  sendMorseLetter(letter: string): void {
+    this._injectedMorseLetter$.next(letter)
   }
 
   private toTimeDiff = (arr: number[]): number => {
