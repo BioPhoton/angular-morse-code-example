@@ -15,17 +15,10 @@ export class MorseCodeDecodingComponent {
   morseCodeDisplaysQueryList
 
   startEvents$: Observable<number>
-  stopEvents$: Observable<number>
-  morseChar$: Observable<any>
-  morseSymbol$: Observable<string>
-  morseLetter$: Observable<string>
+
 
   constructor(public ms: MorseCodeDecoderService) {
     this.startEvents$ = ms.startEvents$
-    this.stopEvents$ = ms.stopEvents$
-    this.morseChar$ = ms.morseChar$
-    this.morseSymbol$ = ms.morseSymbol$
-    this.morseLetter$ = ms.morseLetter$
   }
 
   sendStartSignal() {
