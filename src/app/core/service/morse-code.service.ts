@@ -17,30 +17,16 @@ export class MorseCodeDecoderService {
     return this._startEvents$
   }
 
-  private _stopEvents$: Subject<number> = new Subject<number>()
-  get stopEvents$(): Observable<number> {
-    return this._stopEvents$
-  }
+  private _stopEvents$: Subject<number>
 
   private _morseChar$: Observable<any>
-  get morseChar$(): Observable<any> {
-    return this._morseChar$
-  }
 
   private _morseSymbol$: Observable<string>
-  get morseSymbol$(): Observable<string> {
-    return this._morseSymbol$
-  }
 
   private _morseLetter$: Observable<string>
-  get morseLetter$(): Observable<string> {
-    return this._morseLetter$
-  }
 
-  private _injectMorseChar$: Subject<string> = new Subject<string>()
-  get injectMorseChar$(): Observable<string> {
-    return this._injectMorseChar$
-  }
+  private _injectMorseChar$: Subject<string>
+
   constructor(
     @Inject(MorseTimeRanges) private MorseTimeRanges,
     @Inject(MorseCharacters) private MorseCharacters,
@@ -48,36 +34,15 @@ export class MorseCodeDecoderService {
   ) {
 
     // create stream of morse characters i. e. ".", "-", "+", "*"
-    this._morseChar$ =
-      Observable
-        .combineLatest(this._startEvents$, this._stopEvents$)
-        .map(this.toTimeDiff)
-        .map(this.msToMorseChar)
-        .filter(this.isCharNoShortBreak)
-        .merge(this._injectMorseChar$)
+    // this._morseChar$
 
     // create stream of morse symbols i. e. "...", "-.."
-    this._morseSymbol$ = this._morseChar$
-      .window(this._morseChar$.filter(this.isCharLongBreak))
-      .flatMap(o => o.toArray())
-      .map(this.charArrayToSymbol)
-      .filter(n => n !== '')
+    // this._morseSymbol$
 
     // create stream of letters i. e. "S", "D"
-    this._morseLetter$ = this.morseSymbol$
-      // prevent errors by filtering falsy values
-      // .filter(this.isMorseSymbol)
-      .switchMap(n => Observable.of(n)
-        .map(this.translateSymbolToLetter)
-        .catch(e => Observable.of('ERROR'))
-      )
+    // this._morseLetter$
 
-    const longBreak = Math.abs(this.MorseTimeRanges.longBreak)
-    this._stopEvents$
-      .switchMap(n => Observable.timer(longBreak).takeUntil(this._startEvents$))
-      .subscribe(
-        n => this.injectMorseChar(this.MorseCharacters.longBreak)
-      )
+    // handle extraordinary long breaks by send multiple long breaks
 
   }
 
@@ -86,7 +51,7 @@ export class MorseCodeDecoderService {
   }
 
   sendStopTime(timestamp: number): void {
-    this._stopEvents$.next(timestamp)
+
   }
 
   injectMorseChar(char: string) {
