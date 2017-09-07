@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {MorseCodeEncodingModule} from './pages/morse-code-encoding/morse-code-encoding.module';
+import {MorseCodeDecodingModule} from './pages/morse-code-decoding/morse-code-decoding.module';
 
 const APP_ROUTES: Routes = [
   {
@@ -14,18 +14,17 @@ const APP_ROUTES: Routes = [
   },
   {
     path: 'encode',
-    loadChildren: 'app/pages/morse-code-encoding/morse-code-encoding.module#MorseCodeEncodingModule'
+    loadChildren: 'app/pages/morse-code-decoding/morse-code-decoding.module#MorseCodeDecodingModule'
   }
 ];
 
 @NgModule({
   imports: [
     RouterModule.forRoot(APP_ROUTES),
-    MorseCodeEncodingModule
+    MorseCodeDecodingModule
   ],
   exports: [
-    RouterModule,
-    MorseCodeEncodingModule
+    RouterModule
   ]
 })
 export class AppRouterModule {

@@ -46,8 +46,6 @@ export class MorseButtonComponent implements AfterViewInit, OnDestroy {
 
     this.beepSoundElem.addEventListener('timeupdate', () => {
       const buffer = .42
-      console.log('currentTime', this.beepSoundElem.currentTime)
-      console.log('duration', this.beepSoundElem.duration)
 
       if (this.isMouseDown && !this.isMuted) {
         if (this.beepSoundElem.currentTime > this.beepSoundElem.duration - buffer) {

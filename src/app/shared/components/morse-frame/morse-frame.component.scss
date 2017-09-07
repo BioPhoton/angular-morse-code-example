@@ -73,4 +73,11 @@
       border-color: $longBreakColor;
     }
   }
+
+  &.type-letter {
+    .inner-frame[title='ERROR'] {
+      color: $red;
+    }
+  }
+
 }

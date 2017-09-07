@@ -13,7 +13,7 @@ export class MorseFrameComponent implements OnChanges {
   @Input()
   signal: any
 
-  validSignalTypes = ['default', 'timestamp', 'timediff', 'character', 'symbol']
+  validSignalTypes = ['default', 'timestamp', 'timediff', 'character', 'symbol', 'letter']
   @Input()
   signalType = 'default'
 
