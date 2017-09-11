@@ -18,6 +18,9 @@ $fa-font-path : '../node_modules/font-awesome/fonts';
 // ----------------------------------------------------------------- FONT-AWESOME 4.7.0
 
 // BOOTSTRAP 4.0.0-beta -----------------------------------------------------------------
+@import '~bootstrap/scss/bootstrap';
+
+/*
 // Core variables and mixins
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';
@@ -64,5 +67,5 @@ $fa-font-path : '../node_modules/font-awesome/fonts';
 
 // Utility classes
 @import '~bootstrap/scss/utilities';
-
+*/
 // ----------------------------------------------------------------- BOOTSTRAP 4.0.0-beta
