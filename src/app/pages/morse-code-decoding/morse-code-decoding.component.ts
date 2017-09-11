@@ -16,7 +16,6 @@ export class MorseCodeDecodingComponent {
 
   startEvents$: Observable<number>
 
-
   constructor(public ms: MorseCodeDecoderService) {
     this.startEvents$ = ms.startEvents$
   }
