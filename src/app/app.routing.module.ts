@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
+import {ExtraOptions, RouterModule, Routes} from '@angular/router';
 import {MorseCodeDecodingModule} from './pages/morse-code-decoding/morse-code-decoding.module';
 
 const APP_ROUTES: Routes = [
@@ -18,9 +18,13 @@ const APP_ROUTES: Routes = [
   }
 ];
 
+const extraOptions: ExtraOptions = {
+  useHash: true
+}
+
 @NgModule({
   imports: [
-    RouterModule.forRoot(APP_ROUTES),
+    RouterModule.forRoot(APP_ROUTES, extraOptions),
     MorseCodeDecodingModule
   ],
   exports: [

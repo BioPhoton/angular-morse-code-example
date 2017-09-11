@@ -1,18 +1,23 @@
-import {
-  AfterViewInit,
-  Component,
-  EventEmitter, Input,
-  OnDestroy,
-  Output,
-  ViewChild
-} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {OscillatorService} from './oscillator/oscillator.service';
+import {IOscillatorConfig} from './oscillator/IOscillatorConfig';
+
+const OscillatorFactory = function(): OscillatorService {
+  return new OscillatorService({type: 'square', frequency: 660})
+}
+
 
 @Component({
   selector: 'morse-button',
   templateUrl: './morse-button.component.html',
-  styleUrls: ['./morse-button.component.scss']
+  styleUrls: ['./morse-button.component.scss'],
+  providers: [
+    {
+      provide: OscillatorService, useFactory: OscillatorFactory
+    }
+  ]
 })
-export class MorseButtonComponent implements AfterViewInit, OnDestroy {
+export class MorseButtonComponent {
 
   @Input()
   isMuted = true
@@ -24,43 +29,15 @@ export class MorseButtonComponent implements AfterViewInit, OnDestroy {
   @Output()
   mouseUpChange: EventEmitter<number> = new EventEmitter<number>()
 
-  @ViewChild('beepSound')
-  beepSound
-
-  beepSoundElem: HTMLAudioElement
-
-  constructor() {
-
-  }
-
-  ngAfterViewInit() {
-    this.initBeepSound()
-  }
-
-  ngOnDestroy() {
-
-  }
-
-  initBeepSound() {
-    this.beepSoundElem = this.beepSound.nativeElement
-
-    this.beepSoundElem.addEventListener('timeupdate', () => {
-      const buffer = .42
-
-      if (this.isMouseDown && !this.isMuted) {
-        if (this.beepSoundElem.currentTime > this.beepSoundElem.duration - buffer) {
-          this.beepSoundElem.currentTime = 0
-          this.beepSoundElem.play()
-        }
-      }
-    }, false);
+  constructor(private o: OscillatorService) {
   }
 
   onMouseDown() {
     this.isMouseDown = true
     this.mouseDownChange.next()
+
     if (!this.isMuted) {
-      this.beepSoundElem.play()
+      this.o.play()
     }
   }
 
@@ -73,13 +50,9 @@ export class MorseButtonComponent implements AfterViewInit, OnDestroy {
   onMouseUp() {
     if (this.isMouseDown) {
       this.isMouseDown = false
-
       this.mouseUpChange.next()
 
-      if (!this.beepSoundElem.paused) {
-        this.beepSoundElem.pause()
-        this.beepSoundElem.currentTime = 0
-      }
+      this.o.pause()
     }
   }
 

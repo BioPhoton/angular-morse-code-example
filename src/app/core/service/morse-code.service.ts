@@ -74,7 +74,7 @@ export class MorseCodeDecoderService {
 
     const longBreak = Math.abs(this.MorseTimeRanges.longBreak)
     this._stopEvents$
-      .switchMap(n => Observable.timer(longBreak).takeUntil(this._startEvents$))
+      .switchMap(n => Observable.timer(longBreak, longBreak).take(4).takeUntil(this._startEvents$))
       .subscribe(
         n => this.injectMorseChar(this.MorseCharacters.longBreak)
       )
