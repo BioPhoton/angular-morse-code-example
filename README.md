@@ -65,11 +65,15 @@ And this code for the [visualisation in the component](https://github.com/BioPho
   combineLatest, map and filter operator
   ### Translate series of dost and dashes to readable text
   window, flatmap, map and filer operator
-  ### Handling edge cases and errors
-  switchMap and catch operator
+  ### Handling errors
+  filter, switchMap and catch operator
   ### Handling edge cases
   .switchMap, timer and take operator
 ## Resources
 
 ## Good bye!
 
+
+# Things todo:
+- find good example for hot and cold related to morse stuff
+- create canvas component to draw strokes related to morse signals

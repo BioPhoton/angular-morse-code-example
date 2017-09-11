@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {OscillatorService} from './oscillator/oscillator.service';
 import {IOscillatorConfig} from './oscillator/IOscillatorConfig';
 
-const OscillatorFactory = function(): OscillatorService {
+export const OscillatorFactory = function(): OscillatorService {
   return new OscillatorService({type: 'square', frequency: 660})
 }
 
