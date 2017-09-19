@@ -46,7 +46,7 @@ RxJs in 2 sentences, inventor, story of the idea, technical explanation,
 ## How i am/What i do
 name, interests, background of the example, what my bussines is
 ## [Marble-Diagrams](http://rxmarbles.com/#combineLatest)
-buildingg blocks aof marble diagrams, examples, show rxmarbles
+building blocks of marble diagrams, examples, show rx marbles
 ## Explaining the goal
 Generate timestamps for start and end of sending a signal
 Calculate duration of moude down and up
