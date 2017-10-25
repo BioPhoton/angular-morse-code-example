@@ -1,6 +1,8 @@
 # Real-Time stream processing with [Reactive-Extensions (RX)](http://reactivex.io/)
 #### A playful example of using RX to create a [morse code](https://en.wikipedia.org/wiki/Morse_code) generator with [RxJs](https://github.com/ReactiveX/rxjs) and [Angular](https://angular.io) (No Angular knowledge needed!)
  
+ ![Angular-Morse-Code](https://raw.githubusercontent.com/BioPhoton/angular-morse-code-example/master/resources/images/morse-code-demo.gif)
+ 
 ## Agenda:
 - Intro to RxJs
 - How i am/What i do
