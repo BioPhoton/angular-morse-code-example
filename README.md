@@ -18,6 +18,7 @@
 
 ## Demo
 Find the final code online at [angular-morse-code-example](https://biophoton.github.io/angular-morse-code-example/)
+  For now desktop only... 😜
 
 ## Overview
 Using RxJs to process streams in real-time. 
