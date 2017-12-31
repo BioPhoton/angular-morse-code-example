@@ -1,20 +1,9 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {OscillatorService} from './oscillator/oscillator.service';
-
-export const OscillatorFactory = function(): OscillatorService {
-  return new OscillatorService({type: 'square', frequency: 660})
-}
-
 
 @Component({
   selector: 'morse-button',
   templateUrl: './morse-button.component.html',
-  styleUrls: ['./morse-button.component.scss'],
-  providers: [
-    {
-      provide: OscillatorService, useFactory: OscillatorFactory
-    }
-  ]
+  styleUrls: ['./morse-button.component.scss']
 })
 export class MorseButtonComponent {
 
@@ -28,16 +17,9 @@ export class MorseButtonComponent {
   @Output()
   mouseUpChange: EventEmitter<number> = new EventEmitter<number>()
 
-  constructor(private o: OscillatorService) {
-  }
-
   onMouseDown() {
     this.isMouseDown = true
-    this.mouseDownChange.next()
-
-    if (!this.isMuted) {
-      this.o.play()
-    }
+    this.mouseDownChange.next();
   }
 
   onMouseLeave() {
@@ -49,9 +31,7 @@ export class MorseButtonComponent {
   onMouseUp() {
     if (this.isMouseDown) {
       this.isMouseDown = false
-      this.mouseUpChange.next()
-
-      this.o.pause()
+      this.mouseUpChange.next();
     }
   }
 

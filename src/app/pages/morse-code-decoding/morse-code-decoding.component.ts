@@ -1,5 +1,8 @@
 import {Component, ViewChildren} from '@angular/core';
+
+import 'rxjs/add/observable/merge';
 import {Observable} from 'rxjs/Observable';
+import {Subject} from 'rxjs/Subject';
 import {MorseCodeDecoderService} from '../../core/service/morse-code.service';
 import {MorseDisplayComponent} from '../../shared/components/morse-display/morse-display.component';
 
@@ -9,10 +12,13 @@ import {MorseDisplayComponent} from '../../shared/components/morse-display/morse
 })
 export class MorseCodeDecodingComponent {
 
-  isMuted = true;
-
   @ViewChildren(MorseDisplayComponent)
   morseCodeDisplaysQueryList
+
+  _isSending$: Subject<boolean> = new Subject();
+  get isSending$(): Observable<boolean> {
+    return this._isSending$;
+  }
 
   startEvents$: Observable<number>
   stopEvents$: Observable<number>
@@ -29,15 +35,13 @@ export class MorseCodeDecodingComponent {
   }
 
   sendStartSignal() {
-    this.ms.sendStartTime(Date.now())
+    this._isSending$.next(true);
+    this.ms.sendStartTime(Date.now());
   }
 
   sendStopSignal() {
-    this.ms.sendStopTime(Date.now())
-  }
-
-  toggleMuted() {
-    this.isMuted = !this.isMuted;
+    this._isSending$.next(false);
+    this.ms.sendStopTime(Date.now());
   }
 
   resetAll() {
@@ -45,4 +49,5 @@ export class MorseCodeDecodingComponent {
       display.reset()
     })
   }
+
 }

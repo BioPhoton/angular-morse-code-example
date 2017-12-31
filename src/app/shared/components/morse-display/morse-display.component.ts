@@ -9,6 +9,7 @@ import {
   ViewChild
 } from '@angular/core';
 import {Observable} from 'rxjs/Observable';
+import {takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs/Subject';
 import {Subscription} from 'rxjs/Subscription';
 
@@ -18,6 +19,8 @@ import {Subscription} from 'rxjs/Subscription';
   styleUrls: ['./morse-display.component.scss']
 })
 export class MorseDisplayComponent implements OnChanges, AfterViewChecked, OnDestroy {
+  public isOpen = true;
+
   private onDestroy$: Subject<boolean> = new Subject<boolean>()
 
   private subscriptions: { [key: string]: Subscription } = {}
@@ -57,6 +60,10 @@ export class MorseDisplayComponent implements OnChanges, AfterViewChecked, OnDes
     this.signals = []
   }
 
+  toggleOpen() {
+    this.isOpen = !this.isOpen;
+  }
+
   private handleSubscription = (subName: string, obs$: Observable<any>, next: (value: any) => void, error?: (error: any) => void, complete?: () => void): void => {
     // unsubscribe if a subscription is given
     if (this.subscriptions[subName] && this.subscriptions[subName] instanceof Subscription) {
@@ -68,7 +75,7 @@ export class MorseDisplayComponent implements OnChanges, AfterViewChecked, OnDes
     // and unsubscribe automatically on component destroy
     if (obs$) {
       this.subscriptions[subName] = obs$
-        .takeUntil(this.onDestroy$)
+        .pipe(takeUntil(this.onDestroy$))
         .subscribe(next, error, complete)
     }
   }

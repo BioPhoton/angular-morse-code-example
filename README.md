@@ -4,8 +4,8 @@
  ![Angular-Morse-Code](https://raw.githubusercontent.com/BioPhoton/angular-morse-code-example/master/resources/images/morse-code-demo.gif)
  
 ## Agenda:
-- Intro to RxJs
-- How i am/What i do
+- The ancient story of RxJs
+- 
 - [Marble-Diagrams](http://rxmarbles.com/#combineLatest)
 - Explaining the goal
 - Overview over the code base we begin with
@@ -20,7 +20,6 @@
 
 ## Demo
 Find the final code online at [angular-morse-code-example](https://biophoton.github.io/angular-morse-code-example/)
-  For now desktop only... 😜
 
 ## Overview
 Using RxJs to process streams in real-time. 

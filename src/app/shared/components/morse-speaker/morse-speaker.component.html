@@ -1,0 +1,25 @@
+<div class="btn-group-lg btn-group" role="group">
+  <button type="button"
+          class="btn btn-outline-secondary"
+          (click)="toggleMuted()">
+    <i class="fa"
+      [ngClass]="{'fa-volume-up': !isMuted, 'fa-volume-off': isMuted}">
+    </i>
+  </button>
+  <button
+    id="frequencyDd"
+    type="button"
+    class="btn btn-outline-secondary dropdown-toggle" (click)="toggleOpen()">
+  </button>
+  <div class="dropdown-menu" aria-labelledby="flakeyHttpConfigButton"
+    [ngClass]="{'show': isOpen}" [formGroup]="configForm">
+
+    <h6 class="dropdown-header">Request Delay: {{frequency$ | async}}</h6>
+    <div class="form-group">
+      <input type="range" min=100 max=20000 step=100 name="frequency"
+        class="form-control" formControlName="frequency">
+    </div>
+
+  </div>
+
+</div>
