@@ -11,6 +11,13 @@
   margin-right: 5px;
 }
 
+.card-block {
+  display: none;
+  &.show {
+    display: block;
+  }
+}
+
 .stream {
   width: 100%;
   min-height: 50px;
@@ -19,16 +26,16 @@
   white-space: nowrap;
   padding-top: 5px;
 
-  &.offset-1 {
+  &.off-1 {
     morse-frame:first-child {
-      margin-left: $defaultFrameSize;
+      padding-left: $defaultFrameSize;
 
       &.size-short {
-        margin-left: $defaultFrameSize;
+        padding-left: $defaultFrameSize;
       }
 
       &.size-tiny {
-        margin-left: $tinyFrameSize;
+        padding-left: $tinyFrameSize;
       }
     }
   }
