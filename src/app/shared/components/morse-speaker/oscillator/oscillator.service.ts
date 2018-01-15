@@ -37,9 +37,8 @@ export class OscillatorService {
     this.oscillator.start()
   }
 
-  setFrequency(f) {
-    console.log(f)
-    if(f) {
+  setFrequency (f) {
+    if (f) {
       this.oscillator.frequency.value = f;
       this._frequency$.next(this.oscillator.frequency.value);
     }

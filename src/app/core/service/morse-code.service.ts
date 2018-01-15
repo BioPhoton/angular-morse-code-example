@@ -28,31 +28,37 @@ import {
 @Injectable()
 export class MorseCodeDecoderService {
 
+  // 1. setup subject for start timestamps
   private _startEvents$: Subject<number> = new Subject<number>()
   get startEvents$(): Observable<number> {
     return this._startEvents$.asObservable();
   }
 
+  // 2. setup subject for stop timestamps
   private _stopEvents$: Subject<number> = new Subject<number>()
   get stopEvents$(): Observable<number> {
     return this._stopEvents$.asObservable();
   }
 
+  // 3. define observable for the translation from timestamps to morse character ("-", ".")
   private _morseChar$: Observable<any>
   get morseChar$(): Observable<any> {
     return this._morseChar$
   }
 
+  // define observable for the translation from morse character to morse symbols ("-.","--." )
   private _morseSymbol$: Observable<string>
   get morseSymbol$(): Observable<string> {
     return this._morseSymbol$
   }
 
+  // define observable for the translation from morse symbols to letters ("N", "G")
   private _morseLetter$: Observable<string>
   get morseLetter$(): Observable<string> {
     return this._morseLetter$
   }
 
+  // setup subject to to inject morse characters
   private _injectMorseChar$: Subject<string> = new Subject<string>()
   get injectMorseChar$(): Observable<string> {
     return this._injectMorseChar$.asObservable();
@@ -68,7 +74,7 @@ export class MorseCodeDecoderService {
     //
     //  startEvents$: -d------d------|
     //   stopEvents$: --u---------u--|
-    // combine streams to arrays of start and end
+    // combine streams to arrays of start and end => http://rxmarbles.com/#combineLatest
     // combineLatest: --du----ud--du-|
     // map array to time diff i.e. -42 or 108
     //           map: --n------n--n--|
@@ -76,8 +82,8 @@ export class MorseCodeDecoderService {
     //           map: --c------c--c--|
     // filter out short breaks ("+")
     //        filter: --c---------c--|
-    //
-    // merge(this.injectMorseChar$)
+    // injectMorseChar$: --c---c-----|
+    //         merge: --c--c---c--c--|
     this._morseChar$ = Observable
       .combineLatest(this.startEvents$, this.stopEvents$)
       .pipe(
@@ -128,30 +134,35 @@ export class MorseCodeDecoderService {
         takeUntil(this._startEvents$)
       );
 
+    //  _stopEvents$: ---s---s---------|
+    //     switchMap: -----bb----bbbb--|
     this._stopEvents$
       .pipe(switchMap(n => breakEmitter$))
       .subscribe(n => this.injectMorseChar(this.mC.longBreak));
   }
 
   sendStartTime(timestamp: number): void {
+    // space for validation
     this._startEvents$.next(timestamp)
   }
 
   sendStopTime(timestamp: number): void {
+    // space for validation
     this._stopEvents$.next(timestamp)
   }
 
   injectMorseChar(char: string) {
+    // space for validation
     this._injectMorseChar$.next(char)
   }
 
   // custom operators -----------------------------------
 
-  //  morseSymbol$: s---s-s---s--s--|
-  //           map: s---#
-  //    catchError: ----e|
   private saveTranslate(errorString: string): (source: Observable<string>) => Observable<any> {
     return (source: Observable<string>) => {
+      //        source: s---s-s---s--s--|
+      //           map: s---#
+      //    catchError: ----e|
       return source
         .pipe(
           map(this.translateSymbolToLetter),
@@ -188,6 +199,7 @@ export class MorseCodeDecoderService {
     return arr.filter((v) => v !== this.mC.longBreak).join('')
   }
 
+  // used to show how to not handle an error
   private isMorseSymbol = (symbol: string): boolean => {
     return !!this.mT
       .map(i => i.symbol)
