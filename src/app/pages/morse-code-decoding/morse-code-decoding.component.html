@@ -1,24 +1,21 @@
-<h1>Morse code decoder</h1>
+<h1>Morse Code RX</h1>
 
 <button class="btn btn-outline btn-outline-danger btn-lg" (click)="resetAll()">
   <i class="fa fa-remove"></i>
 </button>
-<button class="btn btn-outline-dark btn-lg"
-  (click)="toggleMuted()">
-  <i class="fa"
-    [ngClass]="{'fa-volume-up': !isMuted, 'fa-volume-off': isMuted}"></i>
-</button>
 
-<morse-button [isMuted]="isMuted"
+<morse-speaker [isPlaying]="isSending$ | async">
+</morse-speaker>
+
+<morse-button
   (mouseDownChange)="sendStartSignal()"
-  (mouseUpChange)="sendStopSignal()"></morse-button>
+  (mouseUpChange)="sendStopSignal()">
+</morse-button>
 
 <morse-display [signal]="startEvents$" [signalType]="'timestamp'">
   <h4>StartEvents</h4>
 </morse-display>
-
 <!--
-
 <morse-display [signal]="stopEvents$" [signalType]="'timestamp'"
   [offset]="1">
   <h4>StopEvents</h4>
@@ -35,7 +32,6 @@
 
 <morse-display [signal]="morseLetter$" [signalType]="'letter'"
   size="auto" [offset]="1">
-  <h4>MorseCode Letter</h4>
+  <h4>Letter</h4>
 </morse-display>
-
 -->

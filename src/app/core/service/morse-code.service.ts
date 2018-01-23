@@ -29,40 +29,20 @@ import {
 export class MorseCodeDecoderService {
 
   // 1. setup subject for start timestamps
-  private _startEvents$: Subject<number> = new Subject<number>()
+  private _startEvents$: Subject<number>
   get startEvents$(): Observable<number> {
-    return this._startEvents$.asObservable();
+
   }
 
   // 2. setup subject for stop timestamps
-  private _stopEvents$: Subject<number> = new Subject<number>()
-  get stopEvents$(): Observable<number> {
-    return this._stopEvents$.asObservable();
-  }
 
   // 3. define observable for the translation from timestamps to morse character ("-", ".")
-  private _morseChar$: Observable<any>
-  get morseChar$(): Observable<any> {
-    return this._morseChar$
-  }
 
   // define observable for the translation from morse character to morse symbols ("-.","--." )
-  private _morseSymbol$: Observable<string>
-  get morseSymbol$(): Observable<string> {
-    return this._morseSymbol$
-  }
 
   // define observable for the translation from morse symbols to letters ("N", "G")
-  private _morseLetter$: Observable<string>
-  get morseLetter$(): Observable<string> {
-    return this._morseLetter$
-  }
 
   // setup subject to to inject morse characters
-  private _injectMorseChar$: Subject<string> = new Subject<string>()
-  get injectMorseChar$(): Observable<string> {
-    return this._injectMorseChar$.asObservable();
-  }
 
   constructor(
     @Inject(MorseTimeRanges) private mR,
@@ -84,14 +64,7 @@ export class MorseCodeDecoderService {
     //        filter: --c---------c--|
     // injectMorseChar$: --c---c-----|
     //         merge: --c--c---c--c--|
-    this._morseChar$ = Observable
-      .combineLatest(this.startEvents$, this.stopEvents$)
-      .pipe(
-        map(this.toTimeDiff),
-        map(this.msToMorseChar),
-        filter(this.isCharNoShortBreak),
-        merge(this.injectMorseChar$)
-      );
+    //// this._morseChar$ =
 
     // create stream of morse symbols i. e. .,-,*,.,*,  =>  ".-", "."
     //  morseChar$: --c-c-c-c-c-c-c---|
@@ -102,73 +75,51 @@ export class MorseCodeDecoderService {
     //         map: --------s-----s---|
     // filter out empty strings
     //      filter: --------s---------|
-    this._morseSymbol$ = this.morseChar$
-      .pipe(
-        buffer(this._morseChar$.pipe(filter(this.isCharLongBreak))),
-        map(this.charArrayToSymbol),
-        filter(n => n !== '')
-      )
+    //// this._morseSymbol$ = this.morseChar$
 
     // create stream of letters i. e. "S", "D"
 
     //  morseSymbol$: ---s-----s---s-----|
     //     switchMap: ---s-----s---s-----|
     // saveTranslate:     `-t|  `-e|`-t|
-    this._morseLetter$ = this.morseSymbol$
-      .pipe(
-        // prevent errors by filtering falsey values is not the best approach
-        // filter(this.isMorseSymbol)
-        switchMap(n => Observable.of(n).pipe(this.saveTranslate('ERROR')))
-      );
+    //// this._morseLetter$
 
-    const longBreak = Math.abs(this.mR.longBreak);
+
+
+    //// const longBreak = Math.abs(this.mR.longBreak);
 
     //        tick$: ----t--t--t--t--t--|
     //        take4: ----t--t--t--t|
     //    startEvents$: ----s-----------|
     //    takeUntil: ----t--t|
-    const breakEmitter$ = Observable
-      .timer(longBreak, longBreak)
-      .pipe(
-        take(4),
-        takeUntil(this._startEvents$)
-      );
+    //// const breakEmitter$
 
     //  _stopEvents$: ---s---s---------|
     //     switchMap: -----bb----bbbb--|
-    this._stopEvents$
-      .pipe(switchMap(n => breakEmitter$))
-      .subscribe(n => this.injectMorseChar(this.mC.longBreak));
+    //// this._stopEvents$
+
   }
 
   sendStartTime(timestamp: number): void {
     // space for validation
-    this._startEvents$.next(timestamp)
   }
 
   sendStopTime(timestamp: number): void {
     // space for validation
-    this._stopEvents$.next(timestamp)
   }
 
   injectMorseChar(char: string) {
     // space for validation
-    this._injectMorseChar$.next(char)
   }
 
   // custom operators -----------------------------------
 
   private saveTranslate(errorString: string): (source: Observable<string>) => Observable<any> {
-    return (source: Observable<string>) => {
+
       //        source: s---s-s---s--s--|
       //           map: s---#
       //    catchError: ----e|
-      return source
-        .pipe(
-          map(this.translateSymbolToLetter),
-          catchError(e => Observable.of(errorString))
-        );
-    };
+      return null
   }
 
   // helpers --------------------------------------------
