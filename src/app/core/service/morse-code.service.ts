@@ -31,7 +31,7 @@ export class MorseCodeDecoderService {
   // 1. setup subject for start timestamps
   private _startEvents$: Subject<number>
   get startEvents$(): Observable<number> {
-
+    return null;
   }
 
   // 2. setup subject for stop timestamps
