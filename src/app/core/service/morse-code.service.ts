@@ -5,7 +5,7 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/timer';
 
 import {Observable} from 'rxjs/Observable';
-
+import {combineLatest} from 'rxjs/observable/combineLatest';
 
 import {
   buffer,
