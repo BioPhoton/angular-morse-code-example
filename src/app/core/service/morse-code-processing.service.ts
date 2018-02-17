@@ -1,24 +1,7 @@
 import {Inject, Injectable} from '@angular/core';
 
-import 'rxjs/add/observable/combineLatest';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/timer';
-
 import {Observable} from 'rxjs/Observable';
-import {combineLatest} from 'rxjs/observable/combineLatest';
-
-import {
-  buffer,
-  catchError,
-  filter,
-  map,
-  merge,
-  switchMap,
-  take,
-  takeUntil
-} from 'rxjs/operators';
 import {Subject} from 'rxjs/Subject';
-
 import {
   MorseCharacters,
   MorseTimeRanges,
@@ -27,6 +10,7 @@ import {
 
 @Injectable()
 export class MorseCodeProcessingService {
+  private msLongBreak = Math.abs(this.mR.longBreak);
 
   // 1. setup subject for start timestamps
   private _startEvents$: Subject<number>
@@ -78,14 +62,12 @@ export class MorseCodeProcessingService {
     //// this._morseSymbol$ = this.morseChar$
 
 
-
     // create stream of letters i. e. "S", "D"
 
     //  morseSymbol$: ---s-----s---s-----|
     //     switchMap: ---s-----s---s-----|
     // safeTranslate:     `-t|  `-e|`-t|
     //// this._morseLetter$
-
 
 
     //// const longBreak = Math.abs(this.mR.longBreak);
@@ -118,10 +100,10 @@ export class MorseCodeProcessingService {
 
   private safeTranslate(errorString: string): (source: Observable<string>) => Observable<any> {
 
-      //        source: s---s-s---s--s--|
-      //           map: s---#
-      //    catchError: ----e|
-      return null
+    //        source: s---s-s---s--s--|
+    //           map: s---#
+    //    catchError: ----e|
+    return null
   }
 
   // helpers --------------------------------------------
@@ -159,11 +141,11 @@ export class MorseCodeProcessingService {
       .find(str => str === symbol)
   }
 
-  private isCharNoShortBreak = (char: string): boolean => {
+  private isCharNoShortBreak = (char: string): char is string => {
     return char !== this.mC.shortBreak
   }
 
-  private isCharLongBreak = (char: string): boolean => {
+  private isCharLongBreak = (char: string): char is string => {
     return char === this.mC.longBreak
   }
 
