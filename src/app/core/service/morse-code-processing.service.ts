@@ -1,12 +1,7 @@
 import {Inject, Injectable} from '@angular/core';
 
-import 'rxjs/add/observable/combineLatest';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/timer';
-
 import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
-
 import {
   MorseCharacters,
   MorseTimeRanges,
@@ -15,6 +10,7 @@ import {
 
 @Injectable()
 export class MorseCodeProcessingService {
+  private msLongBreak = Math.abs(this.mR.longBreak);
 
   private _startEvents$: Subject<number> = new Subject();
   get startEvents$(): Observable<number> {
@@ -89,11 +85,11 @@ export class MorseCodeProcessingService {
       .find(str => str === symbol)
   }
 
-  private isCharNoShortBreak = (char: string): boolean => {
+  private isCharNoShortBreak = (char: string): char is string => {
     return char !== this.mC.shortBreak
   }
 
-  private isCharLongBreak = (char: string): boolean => {
+  private isCharLongBreak = (char: string): char is string => {
     return char === this.mC.longBreak
   }
 
