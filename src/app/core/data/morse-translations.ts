@@ -1,64 +1,71 @@
+import {morseCharacters} from './morse-characters';
+const l = morseCharacters.longMorse;
+const s = morseCharacters.shortMorse;
+const j  = function(arr: string[]) {
+  return arr.join('');
+}
+
 export const morseTranslations: { symbol: string, char: string }[] = [
   // letters
-  {symbol: '.-', char: 'A'},
-  {symbol: '-...', char: 'B'},
-  {symbol: '-.-.', char: 'C'},
-  {symbol: '-..', char: 'D'},
-  {symbol: '.', char: 'E'},
-  {symbol: '..-.', char: 'F'},
-  {symbol: '--.', char: 'G'},
-  {symbol: '....', char: 'H'},
-  {symbol: '..', char: 'I'},
-  {symbol: '.---', char: 'J'},
-  {symbol: '-.-', char: 'K'},
-  {symbol: '.-..', char: 'L'},
-  {symbol: '--', char: 'M'},
-  {symbol: '-.', char: 'N'},
-  {symbol: '---', char: 'O'},
-  {symbol: '.--.', char: 'P'},
-  {symbol: '--.-', char: 'Q'},
-  {symbol: '.-.', char: 'R'},
-  {symbol: '...', char: 'S'},
-  {symbol: '-', char: 'T'},
-  {symbol: '..-', char: 'U'},
-  {symbol: '...-', char: 'V'},
-  {symbol: '.--', char: 'W'},
-  {symbol: '-..-', char: 'X'},
-  {symbol: '-.--', char: 'Y'},
-  {symbol: '--..', char: 'Z'},
+  {symbol: j([s, l]), char: 'A'},
+  {symbol: j([l, s, s, s]), char: 'B'},
+  {symbol: j([l, s, l, s]), char: 'C'},
+  {symbol: j([l, s, s]), char: 'D'},
+  {symbol: j([s]), char: 'E'},
+  {symbol: j([s, s, l, s]), char: 'F'},
+  {symbol: j([l, l, s]), char: 'G'},
+  {symbol: j([s, s, s, s]), char: 'H'},
+  {symbol: j([s, s]), char: 'I'},
+  {symbol: j([s, l, l, l]), char: 'J'},
+  {symbol: j([l, s, l]), char: 'K'},
+  {symbol: j([s, l, s, s]), char: 'L'},
+  {symbol: j([l, l]), char: 'M'},
+  {symbol: j([l, s]), char: 'N'},
+  {symbol: j([l, l, l]), char: 'O'},
+  {symbol: j([s, l, l, s]), char: 'P'},
+  {symbol: j([l, l, s, l]), char: 'Q'},
+  {symbol: j([s, l, s]), char: 'R'},
+  {symbol: j([s, s, s]), char: 'S'},
+  {symbol: j([l]), char: 'T'},
+  {symbol: j([s, s, l]), char: 'U'},
+  {symbol: j([s, s, s, l]), char: 'V'},
+  {symbol: j([s, l, l]), char: 'W'},
+  {symbol: j([l, s, s, l]), char: 'X'},
+  {symbol: j([l, s, l, l]), char: 'Y'},
+  {symbol: j([l, l, s, s]), char: 'Z'},
   // numbers
-  {symbol: '-----', char: '0'},
-  {symbol: '.----', char: '1'},
-  {symbol: '..---', char: '2'},
-  {symbol: '...--', char: '3'},
-  {symbol: '....-', char: '4'},
-  {symbol: '.....', char: '5'},
-  {symbol: '-....', char: '6'},
-  {symbol: '--...', char: '7'},
-  {symbol: '---..', char: '8'},
-  {symbol: '----.', char: '9'},
+  {symbol: j([l, l, l, l, l]), char: '0'},
+  {symbol: j([s, l, l, l, l]), char: '1'},
+  {symbol: j([s, s, l, l, l]), char: '2'},
+  {symbol: j([s, s, s, l, l]), char: '3'},
+  {symbol: j([s, s, s, s, l]), char: '4'},
+  {symbol: j([s, s, s, s, s]), char: '5'},
+  {symbol: j([l, s, s, s, s]), char: '6'},
+  {symbol: j([l, l, s, s, s]), char: '7'},
+  {symbol: j([l, l, l, s, s]), char: '8'},
+  {symbol: j([l, l, l, l, s]), char: '9'},
   // specialsigns
-  {symbol: '.--.-', char: 'À'}, // À,Å
-  {symbol: '.-.-', char: 'Ä'},
-  {symbol: '.-..-', char: 'È'},
-  {symbol: '..-..', char: 'É'},
-  {symbol: '---.', char: 'Ö'},
-  {symbol: '..--', char: 'Ü'},
-  {symbol: '...--..', char: 'ß'},
-  {symbol: '----', char: 'CH'},
-  {symbol: '--.--', char: 'Ñ'},
-  {symbol: '.-.-.-', char: '.'}, // (AAA)
-  {symbol: '--..--', char: ','}, // (MIM)
-  {symbol: '---...', char: ':'}, // (OS)
-  {symbol: '-.-.-.', char: ''}, // (NNN)
-  {symbol: '..--..', char: '?'}, // (IMI)
-  {symbol: '-....-', char: '-'},
-  {symbol: '..--.-', char: '_'}, // (UK)
-  {symbol: '-.--.', char: '('}, // (KN)
-  {symbol: '-.--.-', char: ')'}, // (KK)
-  {symbol: '.----.', char: '\''},
-  {symbol: '-...-', char: '='},
-  {symbol: '.-.-.', char: '+'}, // (AR)
-  {symbol: '-..-.', char: '/'}, // (DN)
-  {symbol: '.--.-.', char: '@'} // (AC)
-]
+  {symbol: j([s, l, l, s, l]), char: 'À'}, // À,Å
+  {symbol: j([s, l, s, l]), char: 'Ä'},
+  {symbol: j([s, l, s, s, l]), char: 'È'},
+  {symbol: j([s, s, l, s, s]), char: 'É'},
+  {symbol: j([l, l, l, s]), char: 'Ö'},
+  {symbol: j([s, s, l, l]), char: 'Ü'},
+  {symbol: j([s, s, s, l, l, s, s]), char: 'ß'},
+  {symbol: j([l, l, l, l]), char: 'CH'},
+  {symbol: j([l, l, s, l, l]), char: 'Ñ'},
+  {symbol: j([s, l, s, l, s, l]), char: 's,'}, // (AAA)
+  {symbol: j([l, l, s, s, l, l]), char: ','}, // (MIM)
+  {symbol: j([l, l, l, s, s, s]), char: ':'}, // (OS)
+  {symbol: j([l, s, l, s, l, s]), char: '(NNN)'}, // (NNN)
+  {symbol: j([s, s, l, l, s, s]), char: '?'}, // (IMI)
+  {symbol: j([l, s, s, s, s, l]), char: 'l,'},
+  {symbol: j([s, s, l, l, s, l]), char: '_'}, // (UK)
+  {symbol: j([l, s, l, l, s]), char: '('}, // (KN)
+  {symbol: j([l, s, l, l, s, l]), char: ')'}, // (KK)
+  {symbol: j([s, l, l, l, l, s]), char: '\''},
+  {symbol: j([l, s, s, s, l]), char: '='},
+  {symbol: j([s, l, s, l, s]), char: '+'}, // (AR)
+  {symbol: j([l, s, s, l, s]), char: '/'}, // (DN)
+  {symbol: j([s, l, l, s, l, s]), char: '@'} // (AC)
+];
