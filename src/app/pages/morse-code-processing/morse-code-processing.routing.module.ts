@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core'
 import { Routes, RouterModule } from '@angular/router'
-import {MorseCodeDecodingComponent} from './morse-code-decoding.component'
+import {MorseCodeProcessingComponent} from './morse-code-processing.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: MorseCodeDecodingComponent
+    component: MorseCodeProcessingComponent
   }
 ]
 
@@ -13,4 +13,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class MorseCodeDecodingRoutingModule { }
+export class MorseCodeProcessingRoutingModule { }

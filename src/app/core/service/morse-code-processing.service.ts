@@ -26,7 +26,7 @@ import {
 } from '../token/injection-tokens';
 
 @Injectable()
-export class MorseCodeDecoderService {
+export class MorseCodeProcessingService {
 
   // 1. setup subject for start timestamps
   private _startEvents$: Subject<number>
@@ -77,11 +77,13 @@ export class MorseCodeDecoderService {
     //      filter: --------s---------|
     //// this._morseSymbol$ = this.morseChar$
 
+
+
     // create stream of letters i. e. "S", "D"
 
     //  morseSymbol$: ---s-----s---s-----|
     //     switchMap: ---s-----s---s-----|
-    // saveTranslate:     `-t|  `-e|`-t|
+    // safeTranslate:     `-t|  `-e|`-t|
     //// this._morseLetter$
 
 
@@ -114,7 +116,7 @@ export class MorseCodeDecoderService {
 
   // custom operators -----------------------------------
 
-  private saveTranslate(errorString: string): (source: Observable<string>) => Observable<any> {
+  private safeTranslate(errorString: string): (source: Observable<string>) => Observable<any> {
 
       //        source: s---s-s---s--s--|
       //           map: s---#

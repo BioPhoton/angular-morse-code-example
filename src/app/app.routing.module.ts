@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {ExtraOptions, RouterModule, Routes} from '@angular/router';
-import {MorseCodeDecodingModule} from './pages/morse-code-decoding/morse-code-decoding.module';
+import {MorseCodeProcessingModule} from './pages/morse-code-processing/morse-code-processing.module';
 
 const APP_ROUTES: Routes = [
   {
@@ -13,8 +13,8 @@ const APP_ROUTES: Routes = [
     loadChildren: 'app/pages/legend/legend.module#LegendModule'
   },
   {
-    path: 'encode',
-    loadChildren: 'app/pages/morse-code-decoding/morse-code-decoding.module#MorseCodeDecodingModule'
+    path: 'processing',
+    loadChildren: 'app/pages/morse-code-processing/morse-code-processing.module#MorseCodeProcessingModule'
   }
 ];
 
@@ -25,7 +25,7 @@ const extraOptions: ExtraOptions = {
 @NgModule({
   imports: [
     RouterModule.forRoot(APP_ROUTES, extraOptions),
-    MorseCodeDecodingModule
+    MorseCodeProcessingModule
   ],
   exports: [
     RouterModule

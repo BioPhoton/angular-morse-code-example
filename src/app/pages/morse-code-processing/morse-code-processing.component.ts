@@ -3,14 +3,14 @@ import {Component, ViewChildren} from '@angular/core';
 import 'rxjs/add/observable/merge';
 import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
-import {MorseCodeDecoderService} from '../../core/service/morse-code.service';
+import {MorseCodeProcessingService} from '../../core/service/morse-code-processing.service';
 import {MorseDisplayComponent} from '../../shared/components/morse-display/morse-display.component';
 
 @Component({
-  selector: 'morse-code-decoding',
-  templateUrl: './morse-code-decoding.component.html'
+  selector: 'morse-code-processing',
+  templateUrl: './morse-code-processing.component.html'
 })
-export class MorseCodeDecodingComponent {
+export class MorseCodeProcessingComponent {
 
   @ViewChildren(MorseDisplayComponent)
   morseCodeDisplaysQueryList
@@ -22,7 +22,7 @@ export class MorseCodeDecodingComponent {
 
   startEvents$: Observable<number>
 
-  constructor(public ms: MorseCodeDecoderService) {
+  constructor(public ms: MorseCodeProcessingService) {
     this.startEvents$ = ms.startEvents$
   }
 
