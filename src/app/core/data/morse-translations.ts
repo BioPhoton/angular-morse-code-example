@@ -1,9 +1,7 @@
 import {morseCharacters} from './morse-characters';
 const l = morseCharacters.longMorse;
 const s = morseCharacters.shortMorse;
-const j  = function(...arr: string[]) {
-  return arr.join('');
-}
+const j  = (...a) => a.join('');
 
 export const morseTranslations: { symbol: string, char: string }[] = [
   // letters
