@@ -20,10 +20,8 @@ export class MorseCodeProcessingComponent {
     return this._isSending$;
   }
 
-  startEvents$: Observable<number>
-
   constructor(public ms: MorseCodeProcessingService) {
-    this.startEvents$ = ms.startEvents$
+
   }
 
   sendStartSignal() {
