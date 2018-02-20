@@ -135,10 +135,10 @@ export class MorseCodeProcessingService {
   }
 
   // used to show how to not handle an error
-  private isMorseSymbol = (symbol: string): boolean => {
+  private isMorseSymbol = (sym: string): sym is string => {
     return !!this.mT
       .map(i => i.symbol)
-      .find(str => str === symbol)
+      .find(str => str === sym)
   }
 
   private isCharNoShortBreak = (char: string): char is string => {
