@@ -12,6 +12,7 @@
   (mouseUpChange)="sendStopSignal()">
 </morse-button>
 
+<!--
 <morse-display [signal]="ms.startEvents$" [signalType]="'timestamp'">
   <h4>StartEvents</h4>
 </morse-display>
@@ -21,9 +22,9 @@
   <h4>StopEvents</h4>
 </morse-display>
 
-<!-- timediff, long, character, short -->
-<morse-display [signal]="ms.morseChar$" [signalType]="'character'"
-  [size]="'short'" [offset]="1">
+ timediff, long, character, short -- >
+<morse-display [signal]="ms.morseChar$" [signalType]="'timediff'"
+  [size]="'character'" [offset]="1">
   <h4>MorseCode Characters</h4>
 </morse-display>
 

@@ -7,15 +7,24 @@ import {
   MorseTimeRanges,
   MorseTranslations
 } from '../token/injection-tokens';
+import {combineLatest} from 'rxjs/observable/combineLatest';
+import {
+  buffer, catchError, filter, map, merge, switchMap, take, takeUntil
+} from 'rxjs/operators';
+import {of} from 'rxjs/observable/of';
+import {timer} from 'rxjs/observable/timer';
 
 @Injectable()
 export class MorseCodeProcessingService {
   private msLongBreak = Math.abs(this.mR.longBreak);
 
   private _startEvents$: Subject<number> = new Subject();
-  get startEvents$(): Observable<number> {
-    return this._startEvents$.asObservable();
-  }
+  // exposed observable
+  startEvents$: Observable<number> = this._startEvents$.asObservable();
+
+  private _stopEvents$: Subject<number> = new Subject();
+  // exposed observable
+  stopEvents$: Observable<number> = this._stopEvents$.asObservable();
 
   public morseChar$: Observable<any>;
 
@@ -31,6 +40,8 @@ export class MorseCodeProcessingService {
 
   }
 
+  // exposed interactions
+
   sendStartTime(timestamp: number): void {
     // space for validation
     this._startEvents$.next(timestamp);
@@ -38,6 +49,7 @@ export class MorseCodeProcessingService {
 
   sendStopTime(timestamp: number): void {
     // space for validation
+    this._stopEvents$.next(timestamp);
   }
 
   injectMorseChar(char: string) {
@@ -46,15 +58,11 @@ export class MorseCodeProcessingService {
 
   // custom operators -----------------------------------
 
-  private safeTranslate(source: Observable<string>): Observable<any> {
-    return null
-  }
+  private safeTranslate = (source: Observable<string>): Observable<string> => source;
 
   // helpers --------------------------------------------
 
-  private toTimeDiff = (arr: number[]): number => {
-    return arr[1] - arr[0]
-  }
+  private toTimeDiff = (arr: number[]): number => arr[1] - arr[0]
 
   private translateSymbolToLetter = (symbol: string): string => {
     const result = this.mT
@@ -78,7 +86,7 @@ export class MorseCodeProcessingService {
     return arr.filter((v) => v !== this.mC.longBreak).join('')
   }
 
-  // used to show how to not handle an error
+  // used to show the wrong way of handling errors ;-)
   private isMorseSymbol = (sym: string): sym is string => {
     return !!this.mT
       .map(i => i.symbol)
