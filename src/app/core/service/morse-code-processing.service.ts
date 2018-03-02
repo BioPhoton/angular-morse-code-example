@@ -1,17 +1,18 @@
 import {Inject, Injectable} from '@angular/core';
 
 import {Observable} from 'rxjs/Observable';
+import {combineLatest} from 'rxjs/observable/combineLatest';
+import {of} from 'rxjs/observable/of';
+import {
+  buffer, catchError, filter, map, merge, switchMap, take,
+  takeUntil
+} from 'rxjs/operators';
 import {Subject} from 'rxjs/Subject';
 import {
   MorseCharacters,
   MorseTimeRanges,
   MorseTranslations
 } from '../token/injection-tokens';
-import {combineLatest} from 'rxjs/observable/combineLatest';
-import {
-  buffer, catchError, filter, map, merge, switchMap, take, takeUntil
-} from 'rxjs/operators';
-import {of} from 'rxjs/observable/of';
 import {timer} from 'rxjs/observable/timer';
 
 @Injectable()
@@ -58,7 +59,12 @@ export class MorseCodeProcessingService {
 
   // custom operators -----------------------------------
 
-  private safeTranslate = (source: Observable<string>): Observable<string> => source;
+  private safeTranslate = (errorString) =>  (source: Observable<string>): Observable<string> => source.pipe(
+    switchMap(sym => of(sym).pipe(
+      map(this.translateSymbolToLetter),
+      catchError(e => of(errorString))
+    ))
+  );
 
   // helpers --------------------------------------------
 
