@@ -38,36 +38,6 @@ export class MorseCodeProcessingService {
     @Inject(MorseTranslations) private mT
   ) {
 
-    const breaks$ = timer(this.msLongBreak, this.msLongBreak).pipe(
-      map(_ => this.mC.longBreak),
-      take(4)
-    );
-    const autoBreaks$ = this.stopEvents$.pipe(
-      switchMap(_ => breaks$.pipe(takeUntil(this.startEvents$)))
-    );
-
-    const obsToCombine = [this.startEvents$, this.stopEvents$];
-    this.morseChar$ = combineLatest(...obsToCombine).pipe(
-      map(this.toTimeDiff),
-      map(this.msToMorseChar),
-      filter(this.isCharNoShortBreak),
-      merge(...[autoBreaks$])
-    );
-
-    const breaksOnly$ = this.morseChar$.pipe(filter(this.isCharLongBreak));
-    this.morseSymbol$ = this.morseChar$.pipe(
-      buffer(breaksOnly$),
-      map(this.charArrayToSymbol),
-      filter(s => !!s)
-    );
-
-    this.morseLetter$ = this.morseSymbol$.pipe(
-      switchMap(sym => of(sym).pipe(
-        map(this.translateSymbolToLetter),
-        catchError(e => of('ERROR'))
-      )
-    )
-    );
   }
 
   // exposed interactions
