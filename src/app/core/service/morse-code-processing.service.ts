@@ -59,12 +59,7 @@ export class MorseCodeProcessingService {
 
   // custom operators -----------------------------------
 
-  private safeTranslate = (errorString) =>  (source: Observable<string>): Observable<string> => source.pipe(
-    switchMap(sym => of(sym).pipe(
-      map(this.translateSymbolToLetter),
-      catchError(e => of(errorString))
-    ))
-  );
+  private safeTranslate = (errorString) =>  (source: Observable<string>): Observable<string> => source
 
   // helpers --------------------------------------------
 
