@@ -8,8 +8,8 @@
 </morse-speaker>
 
 <morse-button
-  (mouseDownChange)="sendStartSignal()"
-  (mouseUpChange)="sendStopSignal()">
+  (downChange)="sendStartSignal()"
+  (upChange)="sendStopSignal()">
 </morse-button>
 
 <morse-display [signal]="startEvents$" [signalType]="'timestamp'">

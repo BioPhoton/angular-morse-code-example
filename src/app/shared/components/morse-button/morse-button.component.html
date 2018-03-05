@@ -1,11 +1,8 @@
 <div class="btn-group">
   <button class="btn btn-morse btn-lg"
-    [ngClass]="{'active': isMouseDown}"
-    (mousedown)="onMouseDown()"
-    (touchstart)="onMouseDown()"
-    (mouseleave)="onMouseLeave()"
-    (touchend)="onMouseLeave()"
-    (mouseup)="onMouseUp()">
+    #mB
+    [ngClass]="{'active': isSending$ | async}"
+    >
     .-
   </button>
 </div>
