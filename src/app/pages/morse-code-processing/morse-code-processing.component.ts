@@ -20,10 +20,18 @@ export class MorseCodeProcessingComponent {
     return this._isSending$;
   }
 
-  startEvents$: Observable<number>
+  startEvents$: Observable<number>;
+  stopEvents$: Observable<number>;
+  morseChar$;
+  morseSymbol$;
+  morseLetter$;
 
   constructor(public ms: MorseCodeProcessingService) {
-    this.startEvents$ = ms.startEvents$
+    this.startEvents$ = ms.startEvents$;
+    this.stopEvents$ = ms.stopEvents$;
+    this.morseChar$ = ms.morseChar$;
+    this.morseSymbol$ = ms.morseSymbol$;
+    this.morseLetter$ = ms.morseLetter$;
   }
 
   sendStartSignal() {

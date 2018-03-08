@@ -1,6 +1,12 @@
 import {Inject, Injectable} from '@angular/core';
 
 import {Observable} from 'rxjs/Observable';
+import {combineLatest} from 'rxjs/observable/combineLatest';
+import {of} from 'rxjs/observable/of';
+import {
+  buffer, catchError, filter, map, mapTo, merge,
+  switchMap, switchMapTo, take, takeUntil
+} from 'rxjs/operators';
 import {Subject} from 'rxjs/Subject';
 import {
   MorseCharacters,
@@ -12,21 +18,16 @@ import {
 export class MorseCodeProcessingService {
   private msLongBreak = Math.abs(this.mR.longBreak);
 
-  // 1. setup subject for start timestamps
-  private _startEvents$: Subject<number>
-  get startEvents$(): Observable<number> {
-    return null;
-  }
+  private startEventsSubject: Subject<number> = new Subject();
+  startEvents$: Observable<number> = this.startEventsSubject.asObservable();
 
-  // 2. setup subject for stop timestamps
+  private stopEventsSubject: Subject<number> = new Subject();
 
-  // 3. define observable for the translation from timestamps to morse character ("-", ".")
+  morseChar$: Observable<any>;
 
-  // define observable for the translation from morse character to morse symbols ("-.","--." )
+  morseSymbol$: Observable<any>;
 
-  // define observable for the translation from morse symbols to letters ("N", "G")
-
-  // setup subject to to inject morse characters
+  morseLetter$: Observable<any>;
 
   constructor(
     @Inject(MorseTimeRanges) private mR,
@@ -34,58 +35,11 @@ export class MorseCodeProcessingService {
     @Inject(MorseTranslations) private mT
   ) {
 
-    // create stream of morse characters i. e. ".", "-", "+", "*"
-    //
-    //  startEvents$: -d------d------|
-    //   stopEvents$: --u---------u--|
-    // combine streams to arrays of start and end => http://rxmarbles.com/#combineLatest
-    // combineLatest: --du----ud--du-|
-    // map array to time diff i.e. -42 or 108
-    //           map: --n------n--n--|
-    // map milliseconds to morse code i.e. ".", "-", "+", "*"
-    //           map: --c------c--c--|
-    // filter out short breaks ("+")
-    //        filter: --c---------c--|
-    // injectMorseChar$: --c---c-----|
-    //         merge: --c--c---c--c--|
-    //// this._morseChar$ =
-
-    // create stream of morse symbols i. e. .,-,*,.,*,  =>  ".-", "."
-    //  morseChar$: --c-c-c-c-c-c-c---|
-    // longBreaks$: --------l-----l---|
-    // group characters to arrays at every long break
-    //      buffer: --------cccc--ccc-|
-    // translate the array to a string
-    //         map: --------s-----s---|
-    // filter out empty strings
-    //      filter: --------s---------|
-    //// this._morseSymbol$ = this.morseChar$
-
-
-    // create stream of letters i. e. "S", "D"
-
-    //  morseSymbol$: ---s-----s---s-----|
-    //     switchMap: ---s-----s---s-----|
-    // safeTranslate:     `-t|  `-e|`-t|
-    //// this._morseLetter$
-
-
-    //// const longBreak = Math.abs(this.mR.longBreak);
-
-    //        tick$: ----t--t--t--t--t--|
-    //        take4: ----t--t--t--t|
-    //    startEvents$: ----s-----------|
-    //    takeUntil: ----t--t|
-    //// const breakEmitter$
-
-    //  _stopEvents$: ---s---s---------|
-    //     switchMap: -----bb----bbbb--|
-    //// this._stopEvents$
-
   }
 
   sendStartTime(timestamp: number): void {
     // space for validation
+    this.startEventsSubject.next(timestamp);
   }
 
   sendStopTime(timestamp: number): void {
@@ -98,13 +52,7 @@ export class MorseCodeProcessingService {
 
   // custom operators -----------------------------------
 
-  private safeTranslate(errorString: string): (source: Observable<string>) => Observable<any> {
-
-    //        source: s---s-s---s--s--|
-    //           map: s---#
-    //    catchError: ----e|
-    return null
-  }
+  private safeTranslate = (source: Observable<string>) => source;
 
   // helpers --------------------------------------------
 
