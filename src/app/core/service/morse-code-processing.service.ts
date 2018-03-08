@@ -22,6 +22,7 @@ export class MorseCodeProcessingService {
   startEvents$: Observable<number> = this.startEventsSubject.asObservable();
 
   private stopEventsSubject: Subject<number> = new Subject();
+  stopEvents$: Observable<number>
 
   morseChar$: Observable<any>;
 
