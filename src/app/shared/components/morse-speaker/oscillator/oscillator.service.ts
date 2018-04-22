@@ -32,14 +32,14 @@ export class OscillatorService {
     this.oscillator = this.audioCtx.createOscillator()
     // config oscillator
     this.oscillator.type = this.config.type
-    this.oscillator.frequency.value = this.config.frequency
+    this.oscillator.frequency.setValueAtTime(this.config.frequency, 0)
     // start wave
     this.oscillator.start()
   }
 
   setFrequency (f) {
     if (f) {
-      this.oscillator.frequency.value = f;
+      this.oscillator.frequency.setValueAtTime(f, 0);
       this._frequency$.next(this.oscillator.frequency.value);
     }
   }

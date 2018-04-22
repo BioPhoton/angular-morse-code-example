@@ -1,7 +1,8 @@
 import {
   Component,
   EventEmitter,
-  Input, OnDestroy,
+  Input,
+  OnDestroy,
   OnInit,
   Output,
   ViewChild
@@ -9,9 +10,7 @@ import {
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import {Observable} from 'rxjs/Observable';
 import {fromEvent} from 'rxjs/observable/fromEvent';
-import {merge as mergeFrom} from 'rxjs/observable/merge';
-import {race} from 'rxjs/observable/race';
-import {map, startWith, switchMap, takeUntil} from 'rxjs/operators';
+import {map, takeUntil} from 'rxjs/operators';
 import {Subject} from 'rxjs/Subject';
 
 @Component({
@@ -21,17 +20,9 @@ import {Subject} from 'rxjs/Subject';
 })
 export class MorseButtonComponent implements OnInit, OnDestroy {
 
-  buttonEvents = {
-    touchstart: 'touchstart',
-    touchend:   'touchend',
-    mousedown:  'mousedown',
-    mouseleave: 'mouseleave',
-    mouseup:    'mouseup'
-  }
-
   morseEvents = {
     start: true,
-    stop:  false,
+    stop: false,
   }
 
   @ViewChild('mB')
@@ -59,75 +50,33 @@ export class MorseButtonComponent implements OnInit, OnDestroy {
   touchStart$: Observable<string>
   touchEnd$: Observable<string>
 
-  morseActions$: Observable<boolean>
-
   ngOnInit() {
-    this.mouseDown$ = fromEvent(this.mB.nativeElement, 'mousedown').pipe(map(_ => this.buttonEvents.mousedown));
-    this.mouseLeave$ = fromEvent(this.mB.nativeElement, 'mouseleave').pipe(map(_ => this.buttonEvents.mouseup));
-    this.mouseUp$ = fromEvent(this.mB.nativeElement, 'mouseup').pipe(map(_ => this.buttonEvents.mouseup));
-    this.touchStart$ = fromEvent(this.mB.nativeElement, 'touchstart').pipe(map(_ => this.buttonEvents.touchstart));
-    this.touchEnd$ = fromEvent(this.mB.nativeElement, 'touchend').pipe(map(_ => this.buttonEvents.touchend));
-    /*
-     this.mouseDown$.subscribe(_ => console.log('mouseDown$'))
-     this.mouseLeave$.subscribe(_ => console.log('mouseLeave$'))
-     this.mouseUp$.subscribe(_ => console.log('mouseUp$'))
-     this.touchStart$.subscribe(_ => console.log('touchStart$'))
-     this.touchEnd$.subscribe(_ => console.log('touchEnd$'))
-     */
+    if (!this.isMobile()) {
+      this.mouseDown$ = fromEvent(this.mB.nativeElement, 'mousedown').pipe(map(_ => this.buttonEvents.mousedown));
+      this.mouseLeave$ = fromEvent(this.mB.nativeElement, 'mouseleave').pipe(map(_ => this.buttonEvents.mouseup));
+      this.mouseUp$ = fromEvent(this.mB.nativeElement, 'mouseup').pipe(map(_ => this.buttonEvents.mouseup));
 
-    // Mouse interaction
-    // mouseDown$:  ------d---------
-    // mouseUp$:    ---------u------
-    // touchStart$: ----------------
-    // touchEnd$:   ----------------
-
-    // Touch interaction
-    // mouseDown$:  --------d--------
-    // mouseUp$:    ----------u------
-    // touchStart$: ----s------------
-    // touchEnd$:   ------e----------
-
-    // reactive button handling
-
-    // mouseDown$:  ------d------d---
-    // touchStart$: ----s------s-----
-    // race():      ----s------s-----
-    // switchMap(): ----s------s-----
-    // merge():     ------e--------e-
-    // actions$:    ----s-e----s---e-
-
-    // reactive handling of button
-
-    const touchStopObs = [this.touchEnd$];
-    const mouseStopObs = [this.mouseUp$, this.mouseLeave$];
-
-    this.morseActions$ = race([
-      this.touchStart$,
       this.mouseDown$
-    ]).pipe(
-      switchMap(eventType => {
-        let interactions$;
+        .pipe(takeUntil(this.onDestroy$))
+        .subscribe(_ => this.onMouseDown());
+      this.mouseLeave$
+        .pipe(takeUntil(this.onDestroy$))
+        .subscribe(_ => this.onMouseLeave());
+      this.mouseUp$
+        .pipe(takeUntil(this.onDestroy$))
+        .subscribe(_ => this.onMouseUp());
 
-        if (eventType === this.buttonEvents.touchstart) {
-          interactions$ = mergeFrom(...touchStopObs)
-        } else {
-          interactions$ = mergeFrom(...mouseStopObs)
-        }
+    } else {
+      this.touchStart$ = fromEvent(this.mB.nativeElement, 'touchstart').pipe(map(_ => this.buttonEvents.touchstart));
+      this.touchEnd$ = fromEvent(this.mB.nativeElement, 'touchend').pipe(map(_ => this.buttonEvents.touchend));
 
-        return interactions$.pipe(
-          map(_ => this.morseEvents.stop),
-          startWith(this.morseEvents.start)
-        );
-      })
-    );
-
-    this.morseActions$.pipe(takeUntil(this.onDestroy$))
-      .subscribe(
-        this.morseInteraction,
-        null,
-        () => this.morseInteraction(this.morseEvents.stop)
-      )
-
+      this.touchStart$
+        .pipe(takeUntil(this.onDestroy$))
+        .subscribe(_ => this.onTouchStart())
+      this.touchEnd$
+        .pipe(takeUntil(this.onDestroy$))
+        .subscribe(_ => this.onTouchEnd())
+    }
   }
 
   ngOnDestroy(): void {
@@ -138,33 +87,52 @@ export class MorseButtonComponent implements OnInit, OnDestroy {
   // declarative handling of button
 
   onMouseDown() {
-    console.log('onMouseDown')
     this.startSending();
   }
 
   onMouseLeave() {
-    console.log('onMouseLeave')
     if (this._isSending$.getValue()) {
       this.stopSending()
     }
   }
 
   onMouseUp() {
-    console.log('onMouseUp')
     this.stopSending();
   }
 
   onTouchStart() {
-    console.log('onTouchStart')
     this.startSending();
   }
 
   onTouchEnd() {
-    console.log('onTouchEnd')
     this.stopSending();
   }
 
   // helper functions
+
+  private isMobile(): boolean | string {
+    const useragent = navigator.userAgent;
+
+    if (useragent.match(/Android/i)) {
+      return 'android';
+    } else if (useragent.match(/webOS/i)) {
+      return 'webos';
+    } else if (useragent.match(/iPhone/i)) {
+      return 'iphone';
+    } else if (useragent.match(/iPod/i)) {
+      return 'ipod';
+    } else if (useragent.match(/iPad/i)) {
+      return 'ipad';
+    } else if (useragent.match(/Windows Phone/i)) {
+      return 'windows phone';
+    } else if (useragent.match(/SymbianOS/i)) {
+      return 'symbian';
+    } else if (useragent.match(/RIM/i) || useragent.match(/BB/i)) {
+      return 'blackberry';
+    } else {
+      return false;
+    }
+  }
 
   private morseInteraction = (action) => {
     if (action === this.morseEvents.start) {

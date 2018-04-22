@@ -12,8 +12,10 @@ import {
   catchError,
   filter,
   map,
+  mapTo,
   merge,
   switchMap,
+  switchMapTo,
   take,
   takeUntil
 } from 'rxjs/operators';
@@ -30,39 +32,23 @@ export class MorseCodeDecoderService {
 
   // 1. setup subject for start timestamps
   private _startEvents$: Subject<number> = new Subject<number>()
-  get startEvents$(): Observable<number> {
-    return this._startEvents$.asObservable();
-  }
+  startEvents$: Observable<number> = this._startEvents$.asObservable();
 
   // 2. setup subject for stop timestamps
   private _stopEvents$: Subject<number> = new Subject<number>()
-  get stopEvents$(): Observable<number> {
-    return this._stopEvents$.asObservable();
-  }
+  stopEvents$: Observable<number> = this._stopEvents$.asObservable();
 
   // 3. define observable for the translation from timestamps to morse character ("-", ".")
-  private _morseChar$: Observable<any>
-  get morseChar$(): Observable<any> {
-    return this._morseChar$
-  }
-
+  morseChar$: Observable<any>;
   // define observable for the translation from morse character to morse symbols ("-.","--." )
-  private _morseSymbol$: Observable<string>
-  get morseSymbol$(): Observable<string> {
-    return this._morseSymbol$
-  }
+  morseSymbol$: Observable<string>;
 
   // define observable for the translation from morse symbols to letters ("N", "G")
-  private _morseLetter$: Observable<string>
-  get morseLetter$(): Observable<string> {
-    return this._morseLetter$
-  }
+  morseLetter$: Observable<string>;
 
   // setup subject to to inject morse characters
   private _injectMorseChar$: Subject<string> = new Subject<string>()
-  get injectMorseChar$(): Observable<string> {
-    return this._injectMorseChar$.asObservable();
-  }
+  injectMorseChar$: Observable<string> = this._injectMorseChar$.asObservable();
 
   constructor(
     @Inject(MorseTimeRanges) private mR,
@@ -84,7 +70,7 @@ export class MorseCodeDecoderService {
     //        filter: --c---------c--|
     // injectMorseChar$: --c---c-----|
     //         merge: --c--c---c--c--|
-    this._morseChar$ = Observable
+    this.morseChar$ = Observable
       .combineLatest(this.startEvents$, this.stopEvents$)
       .pipe(
         map(this.toTimeDiff),
@@ -102,9 +88,9 @@ export class MorseCodeDecoderService {
     //         map: --------s-----s---|
     // filter out empty strings
     //      filter: --------s---------|
-    this._morseSymbol$ = this.morseChar$
+    this.morseSymbol$ = this.morseChar$
       .pipe(
-        buffer(this._morseChar$.pipe(filter(this.isCharLongBreak))),
+        buffer(this.morseChar$.pipe(filter(this.isCharLongBreak))),
         map(this.charArrayToSymbol),
         filter(n => n !== '')
       )
@@ -114,7 +100,7 @@ export class MorseCodeDecoderService {
     //  morseSymbol$: ---s-----s---s-----|
     //     switchMap: ---s-----s---s-----|
     // saveTranslate:     `-t|  `-e|`-t|
-    this._morseLetter$ = this.morseSymbol$
+    this.morseLetter$ = this.morseSymbol$
       .pipe(
         // prevent errors by filtering falsey values is not the best approach
         // filter(this.isMorseSymbol)
@@ -130,15 +116,19 @@ export class MorseCodeDecoderService {
     const breakEmitter$ = Observable
       .timer(longBreak, longBreak)
       .pipe(
-        take(4),
-        takeUntil(this._startEvents$)
+        mapTo(this.mC.longBreak),
+        take(4)
       );
 
     //  _stopEvents$: ---s---s---------|
     //     switchMap: -----bb----bbbb--|
     this._stopEvents$
-      .pipe(switchMap(n => breakEmitter$))
-      .subscribe(n => this.injectMorseChar(this.mC.longBreak));
+      .pipe(
+        switchMapTo(
+          breakEmitter$.pipe(takeUntil(this._startEvents$))
+        )
+      )
+      .subscribe(c => this.injectMorseChar(c));
   }
 
   sendStartTime(timestamp: number): void {
@@ -158,24 +148,20 @@ export class MorseCodeDecoderService {
 
   // custom operators -----------------------------------
 
-  private saveTranslate(errorString: string): (source: Observable<string>) => Observable<any> {
-    return (source: Observable<string>) => {
+  private saveTranslate = (errorString: string) =>
+    (source: Observable<string>): Observable<string> =>
       //        source: s---s-s---s--s--|
       //           map: s---#
       //    catchError: ----e|
-      return source
+      source
         .pipe(
           map(this.translateSymbolToLetter),
           catchError(e => Observable.of(errorString))
         );
-    };
-  }
 
   // helpers --------------------------------------------
 
-  private toTimeDiff = (arr: number[]): number => {
-    return arr[1] - arr[0]
-  }
+  private toTimeDiff = (arr: number[]): number => arr[1] - arr[0];
 
   private translateSymbolToLetter = (symbol: string): string => {
     const result = this.mT
