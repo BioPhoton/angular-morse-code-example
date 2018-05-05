@@ -28,7 +28,7 @@
     "core-js": "2.5.5",
     "font-awesome": "^4.7.0",
     "rxjs": "6.1.0",
-    "typescript": "2.8.3",
+    "typescript": "2.7.2",
     "zone.js": "0.8.26",
     "rxjs-compat": "^6.0.0-rc.0"
   },
