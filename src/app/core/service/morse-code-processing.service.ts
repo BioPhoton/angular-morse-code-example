@@ -1,13 +1,10 @@
 import {Inject, Injectable} from '@angular/core';
 
-import {Observable} from 'rxjs/Observable';
-import {combineLatest} from 'rxjs/observable/combineLatest';
-import {of} from 'rxjs/observable/of';
+import {Observable, combineLatest, of, Subject} from 'rxjs';
 import {
   buffer, catchError, filter, map, mapTo, merge,
   switchMap, switchMapTo, take, takeUntil
 } from 'rxjs/operators';
-import {Subject} from 'rxjs/Subject';
 import {
   MorseCharacters,
   MorseTimeRanges,
