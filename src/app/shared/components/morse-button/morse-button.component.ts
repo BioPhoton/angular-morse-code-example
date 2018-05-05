@@ -20,6 +20,14 @@ import {Subject} from 'rxjs/Subject';
 })
 export class MorseButtonComponent implements OnInit, OnDestroy {
 
+  buttonEvents = {
+    touchstart: 'touchstart',
+    touchend: 'touchend',
+    mousedown: 'mousedown',
+    mouseleave: 'mouseleave',
+    mouseup: 'mouseup'
+  }
+
   morseEvents = {
     start: true,
     stop: false,
