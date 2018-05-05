@@ -62,7 +62,12 @@ export class MorseDisplayComponent implements OnChanges, AfterViewChecked, OnDes
     this.isOpen = !this.isOpen;
   }
 
-  private handleSubscription = (subName: string, obs$: Observable<any>, next: (value: any) => void, error?: (error: any) => void, complete?: () => void): void => {
+  private handleSubscription = (
+    subName: string, obs$: Observable<any>,
+    next: (value: any) => void,
+    error?: (error: any) => void,
+    complete?: () => void
+  ): void => {
     // unsubscribe if a subscription is given
     if (this.subscriptions[subName] && this.subscriptions[subName] instanceof Subscription) {
       this.subscriptions[subName].unsubscribe()
