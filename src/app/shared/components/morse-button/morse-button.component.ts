@@ -7,11 +7,8 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {Observable} from 'rxjs/Observable';
-import {fromEvent} from 'rxjs/observable/fromEvent';
+import {BehaviorSubject, Observable, fromEvent, Subject} from 'rxjs';
 import {map, takeUntil} from 'rxjs/operators';
-import {Subject} from 'rxjs/Subject';
 
 @Component({
   selector: 'morse-button',

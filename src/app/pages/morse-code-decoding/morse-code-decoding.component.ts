@@ -1,8 +1,7 @@
 import {Component, ViewChildren} from '@angular/core';
 
-import 'rxjs/add/observable/merge';
-import {Observable} from 'rxjs/Observable';
-import {merge} from 'rxjs/observable/merge';
+
+import {Observable, merge} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {MorseCodeDecoderService} from '../../core/service/morse-code.service';
 import {MorseDisplayComponent} from '../../shared/components/morse-display/morse-display.component';

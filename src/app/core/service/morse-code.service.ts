@@ -1,10 +1,12 @@
 import {Inject, Injectable} from '@angular/core';
 
-import 'rxjs/add/observable/combineLatest';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/observable/timer';
-
-import {Observable} from 'rxjs/Observable';
+import {
+  combineLatest as observableCombineLatest,
+  Observable,
+  of as observableOf,
+  Subject,
+  timer as observableTimer
+} from 'rxjs';
 
 
 import {
@@ -19,7 +21,6 @@ import {
   take,
   takeUntil
 } from 'rxjs/operators';
-import {Subject} from 'rxjs/Subject';
 
 import {
   MorseCharacters,
@@ -70,8 +71,7 @@ export class MorseCodeDecoderService {
     //        filter: --c---------c--|
     // injectMorseChar$: --c---c-----|
     //         merge: --c--c---c--c--|
-    this.morseChar$ = Observable
-      .combineLatest(this.startEvents$, this.stopEvents$)
+    this.morseChar$ = observableCombineLatest(this.startEvents$, this.stopEvents$)
       .pipe(
         map(this.toTimeDiff),
         map(this.msToMorseChar),
@@ -104,7 +104,7 @@ export class MorseCodeDecoderService {
       .pipe(
         // prevent errors by filtering falsey values is not the best approach
         // filter(this.isMorseSymbol)
-        switchMap(n => Observable.of(n).pipe(this.saveTranslate('ERROR')))
+        switchMap(n => observableOf(n).pipe(this.saveTranslate('ERROR')))
       );
 
     const longBreak = Math.abs(this.mR.longBreak);
@@ -113,8 +113,7 @@ export class MorseCodeDecoderService {
     //        take4: ----t--t--t--t|
     //    startEvents$: ----s-----------|
     //    takeUntil: ----t--t|
-    const breakEmitter$ = Observable
-      .timer(longBreak, longBreak)
+    const breakEmitter$ = observableTimer(longBreak, longBreak)
       .pipe(
         mapTo(this.mC.longBreak),
         take(4)
@@ -156,7 +155,7 @@ export class MorseCodeDecoderService {
       source
         .pipe(
           map(this.translateSymbolToLetter),
-          catchError(e => Observable.of(errorString))
+          catchError(e => observableOf(errorString))
         );
 
   // helpers --------------------------------------------

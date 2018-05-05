@@ -1,8 +1,6 @@
 import {Injectable} from '@angular/core';
 import {IOscillatorConfig} from './IOscillatorConfig';
-import {Subject} from 'rxjs/Subject';
-import {BehaviorSubject} from 'rxjs/BehaviorSubject';
-import {Observable} from 'rxjs/Observable';
+import {Subject, BehaviorSubject, Observable} from 'rxjs';
 
 @Injectable()
 export class OscillatorService {

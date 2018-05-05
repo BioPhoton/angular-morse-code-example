@@ -8,10 +8,8 @@ import {
   SimpleChanges,
   ViewChild
 } from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import {Observable, Subject, Subscription} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {Subject} from 'rxjs/Subject';
-import {Subscription} from 'rxjs/Subscription';
 
 @Component({
   selector: 'morse-display',
