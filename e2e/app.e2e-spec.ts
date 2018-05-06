@@ -1,6 +1,6 @@
 import { AppPage } from './app.po';
 
-describe('angular-morsecode App', () => {
+describe('rxjs-schedulers App', () => {
   let page: AppPage;
 
   beforeEach(() => {
