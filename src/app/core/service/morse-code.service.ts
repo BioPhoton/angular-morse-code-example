@@ -31,6 +31,8 @@ import {
 @Injectable()
 export class MorseCodeDecoderService {
 
+  private msLongBreak = Math.abs(this.mR.longBreak);
+
   // 1. setup subject for start timestamps
   private startEventsSubject: Subject<number> = new Subject<number>()
   startEvents$: Observable<number> = this.startEventsSubject.asObservable();
@@ -111,13 +113,11 @@ export class MorseCodeDecoderService {
         switchMap(n => observableOf(n).pipe(this.saveTranslate('ERROR')))
       );
 
-    const longBreak = Math.abs(this.mR.longBreak);
-
     //        tick$: ----t--t--t--t--t--|
     //        take4: ----t--t--t--t|
     //    startEvents$: ----s-----------|
     //    takeUntil: ----t--t|
-    const breakEmitter$ = observableTimer(longBreak, longBreak)
+    const breakEmitter$ = observableTimer(this.msLongBreak, this.msLongBreak)
       .pipe(
         mapTo(this.mC.longBreak),
         take(4)
