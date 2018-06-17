@@ -1,8 +1,8 @@
 import {Component, ViewChildren} from '@angular/core';
 
 
-import {Observable, merge} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {merge as observableMerge, Observable} from 'rxjs';
+import {mapTo} from 'rxjs/operators';
 import {MorseCodeDecoderService} from '../../core/service/morse-code.service';
 import {MorseDisplayComponent} from '../../shared/components/morse-display/morse-display.component';
 
@@ -32,11 +32,11 @@ export class MorseCodeDecodingComponent {
     this.morseSymbol$ = ms.morseSymbol$
     this.morseLetter$ = ms.morseLetter$
 
-    const morseEvents$ = [
-      this.startEvents$.pipe(map(_ => true)),
-      this.stopEvents$.pipe(map(_ => false))
+    const morseEvents$: Observable<boolean>[] = [
+      this.startEvents$.pipe(mapTo(true)),
+      this.stopEvents$.pipe(mapTo(false))
     ];
-    this.isSending$ = merge(...morseEvents$);
+    this.isSending$ = observableMerge(...morseEvents$);
   }
 
   sendStartSignal() {
@@ -49,7 +49,7 @@ export class MorseCodeDecodingComponent {
 
   resetAll() {
     this.morseCodeDisplaysQueryList.forEach((display) => {
-      display.reset()
+      display.reset();
     })
   }
 

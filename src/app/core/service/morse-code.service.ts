@@ -3,6 +3,7 @@ import {Inject, Injectable} from '@angular/core';
 import {
   combineLatest as observableCombineLatest,
   Observable,
+  merge as observableMerge,
   of as observableOf,
   Subject,
   timer as observableTimer
@@ -15,7 +16,6 @@ import {
   filter,
   map,
   mapTo,
-  merge,
   switchMap,
   switchMapTo,
   take,
@@ -32,12 +32,12 @@ import {
 export class MorseCodeDecoderService {
 
   // 1. setup subject for start timestamps
-  private _startEvents$: Subject<number> = new Subject<number>()
-  startEvents$: Observable<number> = this._startEvents$.asObservable();
+  private startEventsSubject: Subject<number> = new Subject<number>()
+  startEvents$: Observable<number> = this.startEventsSubject.asObservable();
 
   // 2. setup subject for stop timestamps
-  private _stopEvents$: Subject<number> = new Subject<number>()
-  stopEvents$: Observable<number> = this._stopEvents$.asObservable();
+  private stopEventsSubject: Subject<number> = new Subject<number>()
+  stopEvents$: Observable<number> = this.stopEventsSubject.asObservable();
 
   // 3. define observable for the translation from timestamps to morse character ("-", ".")
   morseChar$: Observable<any>;
@@ -71,13 +71,14 @@ export class MorseCodeDecoderService {
     //        filter: --c---------c--|
     // injectMorseChar$: --c---c-----|
     //         merge: --c--c---c--c--|
-    this.morseChar$ = observableCombineLatest(this.startEvents$, this.stopEvents$)
+    const morseCharFromEvents$ = observableCombineLatest(this.startEvents$, this.stopEvents$)
       .pipe(
         map(this.toTimeDiff),
         map(this.msToMorseChar),
-        filter(this.isCharNoShortBreak),
-        merge(this.injectMorseChar$)
+        filter(this.isCharNoShortBreak as any)
       );
+
+    this.morseChar$ = observableMerge(morseCharFromEvents$, this.injectMorseChar$)
 
     // create stream of morse symbols i. e. .,-,*,.,*,  =>  ".-", "."
     //  morseChar$: --c-c-c-c-c-c-c---|
@@ -88,11 +89,14 @@ export class MorseCodeDecoderService {
     //         map: --------s-----s---|
     // filter out empty strings
     //      filter: --------s---------|
+    const longBreaks$ = this.morseChar$
+      .pipe(filter(this.isCharLongBreak as any));
+
     this.morseSymbol$ = this.morseChar$
       .pipe(
-        buffer(this.morseChar$.pipe(filter(this.isCharLongBreak))),
+        buffer(longBreaks$),
         map(this.charArrayToSymbol),
-        filter(n => n !== '')
+        filter(n => (n !== '') as any)
       )
 
     // create stream of letters i. e. "S", "D"
@@ -121,23 +125,23 @@ export class MorseCodeDecoderService {
 
     //  _stopEvents$: ---s---s---------|
     //     switchMap: -----bb----bbbb--|
-    this._stopEvents$
+    this.stopEventsSubject
       .pipe(
         switchMapTo(
-          breakEmitter$.pipe(takeUntil(this._startEvents$))
+          breakEmitter$.pipe(takeUntil(this.startEventsSubject))
         )
       )
-      .subscribe(c => this.injectMorseChar(c));
+      .subscribe(n => this.injectMorseChar(n));
   }
 
   sendStartTime(timestamp: number): void {
     // space for validation
-    this._startEvents$.next(timestamp)
+    this.startEventsSubject.next(timestamp)
   }
 
   sendStopTime(timestamp: number): void {
     // space for validation
-    this._stopEvents$.next(timestamp)
+    this.stopEventsSubject.next(timestamp)
   }
 
   injectMorseChar(char: string) {
@@ -191,7 +195,7 @@ export class MorseCodeDecoderService {
       .find(str => str === symbol)
   }
 
-  private isCharNoShortBreak = (char: string): boolean => {
+  private isCharNoShortBreak = (char) => {
     return char !== this.mC.shortBreak
   }
 

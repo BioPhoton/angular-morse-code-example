@@ -7,7 +7,7 @@ import {
   Output,
   ViewChild
 } from '@angular/core';
-import {BehaviorSubject, Observable, fromEvent, Subject} from 'rxjs';
+import {BehaviorSubject, fromEvent, Observable, Subject} from 'rxjs';
 import {map, takeUntil} from 'rxjs/operators';
 
 @Component({
