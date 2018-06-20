@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "rxjs-schedulers": {
+    "angular-morsecode": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -52,14 +52,14 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "rxjs-schedulers:build:production"
+              "browserTarget": "angular-morsecode:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "rxjs-schedulers:build"
+            "browserTarget": "angular-morsecode:build"
           }
         },
         "test": {
@@ -102,7 +102,7 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "rxjs-schedulers:serve"
+            "devServerTarget": "angular-morsecode:serve"
           }
         },
         "lint": {
@@ -119,7 +119,7 @@
       }
     }
   },
-  "defaultProject": "rxjs-schedulers",
+  "defaultProject": "angular-morsecode",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "",
