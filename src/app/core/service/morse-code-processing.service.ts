@@ -58,7 +58,7 @@ export class MorseCodeProcessingService {
 
   // custom operators -----------------------------------
 
-  private safeTranslate = (errorString) => (source: Observable<string>) => source;
+  private safeTranslate = (source: Observable<string>) => source;
 
   // helpers --------------------------------------------
 
