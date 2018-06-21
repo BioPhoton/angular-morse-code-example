@@ -48,7 +48,7 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "rxjs-schedulers:build"
+            "browserTarget": "angular-morsecode:build"
           },
           "configurations": {
             "production": {
@@ -93,7 +93,7 @@
         }
       }
     },
-    "rxjs-schedulers-e2e": {
+    "angular-morsecode-e2e": {
       "root": "",
       "sourceRoot": "",
       "projectType": "application",
