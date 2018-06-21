@@ -12,6 +12,11 @@
   (mouseUpChange)="sendStopSignal()">
 </morse-button>
 
+<div class="morse-signal" style="width: 55px; vertical-align: middle; display: inline-flex;">
+  <h1 *ngIf="isSending$ | async">😮</h1>
+  <h1 *ngIf="!(isSending$ | async)">😐</h1>
+</div>
+
 <morse-display [signal]="startEvents$" [signalType]="'timestamp'">
   <h4>StartEvents</h4>
 </morse-display>
